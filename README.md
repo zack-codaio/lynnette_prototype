@@ -1,3 +1,9 @@
+# Lynnette Functional Prototype
+* For Fall 2014 independent study with Yanjin Long and Professor Vincent Aleven
+* built on top of the MEAN.js stack
+
+
+
 [![MEAN.JS Logo](http://meanjs.org/img/logo-small.png)](http://meanjs.org/)
 
 [![Build Status](https://travis-ci.org/meanjs/mean.svg?branch=master)](https://travis-ci.org/meanjs/mean)
