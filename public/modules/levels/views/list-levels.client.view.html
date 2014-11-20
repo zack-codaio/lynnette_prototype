@@ -1,0 +1,19 @@
+<section data-ng-controller="LevelsController" data-ng-init="find()">
+    <div class="page-header">
+        <h1>Levels</h1>
+    </div>
+    <div class="list-group">
+        <a data-ng-repeat="level in levels" data-ng-href="#!/levels/{{level._id}}" class="list-group-item">
+			<small class="list-group-item-text">
+				Posted on
+				<span data-ng-bind="level.created | date:'medium'"></span>
+				by
+				<span data-ng-bind="level.user.displayName"></span>
+			</small>
+			<h4 class="list-group-item-heading" data-ng-bind="level.name"></h4>
+        </a>
+    </div>
+    <div class="alert alert-warning text-center" data-ng-hide="!levels.$resolved || levels.length">
+    	No Levels yet, why don't you <a href="/#!/levels/create">create one</a>?
+    </div>
+</section>

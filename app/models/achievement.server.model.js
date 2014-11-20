@@ -1,0 +1,43 @@
+'use strict';
+
+/**
+ * Module dependencies.
+ */
+var mongoose = require('mongoose'),
+	Schema = mongoose.Schema;
+
+/**
+ * Achievement Schema
+ */
+var AchievementSchema = new Schema({
+	name: {
+		type: String,
+		default: '',
+		required: 'Please fill Achievement name',
+		trim: true
+	},
+	created: {
+		type: Date,
+		default: Date.now
+	},
+	user: {
+		type: Schema.ObjectId,
+		ref: 'User'
+	},
+    description:{
+        type: String,
+        default: '',
+        required: 'Please give this achievement a description',
+        trim:true
+    },
+    completed: {
+        type: Boolean,
+        default: false
+    },
+    goal:{
+        type:Boolean,
+        default: false
+    }
+});
+
+mongoose.model('Achievement', AchievementSchema);

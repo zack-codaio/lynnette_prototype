@@ -1,0 +1,76 @@
+<section data-ng-controller="HomeController">
+</section>
+
+<div class="maincontain">
+    <!--begin level selection area-->
+    <div class="levelselect">
+        <div class="level">
+            <div class="levelbadge"></div>
+            <h3 class="levelname">Earth</h3>
+        </div>
+        <div class="level">
+            <div class="levelbadge"></div>
+        </div>
+        <div class="level">
+            <div class="levelbadge"></div>
+        </div>
+        <div class="level">
+            <div class="levelbadge"></div>
+        </div>
+        <div class="level">
+            <div class="levelbadge"></div>
+        </div>
+        <div class="level">
+            <div class="levelbadge"></div>
+        </div>
+    </div>
+
+
+
+    <!--begin sidebar-->
+    <div class="sidebar">
+        <div class="personal" ng-controller="UserInfoController">
+            <div class="portrait"></div>
+            <div class="personaltext">
+                <h2>{{displayName}}</h2>
+                Selection Level: {{selectionLevel}}
+                <br>
+                Completion Level: {{completionLevel}}</div>
+        </div>
+        <div class="badges">
+            <div class="badge"></div>
+            <div class="badge"></div>
+            <div class="badge"></div>
+            <div class="badge"></div>
+            <div class="badge"></div>
+        </div>
+        <div>
+                <!--ng-controller="AchievementsController"-->
+
+            <h3>My Goals</h3>
+            <div class="achievement_goal">
+                Problem Selection Master
+            </div>
+            <div class="achievement_goal">
+                Run, Don't Walk
+            </div>
+            <div class="achievement_goal">
+                We Laugh, We Cry
+            </div>
+        </div>
+        <div>
+            <h3>Daily Challenge</h3>
+            <div class="achievement_goal">
+                <h3>Elemental Sampler</h3>
+                Complete three problems from each unmastered level.
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--directive for all messages?-->
+<!--<div class="blockUI">-->
+    <!--<div class="modalpop">-->
+        <!--test message-->
+    <!--</div>-->
+<!--</div>-->
