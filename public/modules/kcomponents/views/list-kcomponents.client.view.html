@@ -11,6 +11,12 @@
 				<span data-ng-bind="kcomponent.user.displayName"></span>
 			</small>
 			<h4 class="list-group-item-heading" data-ng-bind="kcomponent.name"></h4>
+            <!--description-->
+            <!--mastered-->
+            <!--percent complete-->
+            <p>{{kcomponent.description}}</p>
+            <p>Mastered: {{kcomponent.mastered}}</p>
+            <p>Percent Complete: {{kcomponent.percentComplete}}%</p>
         </a>
     </div>
     <div class="alert alert-warning text-center" data-ng-hide="!kcomponents.$resolved || kcomponents.length">

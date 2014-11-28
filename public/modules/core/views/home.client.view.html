@@ -1,27 +1,196 @@
 <section data-ng-controller="HomeController">
 </section>
 
-<div class="maincontain">
+
+
+<div class="maincontain" data-ng-controller="LevelsController">
+
+    <!--modal dialogues-->
+    <div class="blockUI" data-ng-show="level_complete_message">
+        <div class="modalpop">
+            <h1>Congratulations!</h1>
+            <p class="modal_text">
+                You have completed Level 1 and earned the Earth badge!
+            </p>
+            <div class="button" data-ng-click="level_complete_next()">
+                Next
+            </div>
+        </div>
+    </div>
+    <div class="blockUI" data-ng-show="problem_selection_message">
+        <div class="modalpop">
+            <h1>Problem Selection Rating</h1>
+            <p class="modal_text">
+                You solved 10 problems, two of which did not help you toward mastery.
+            </p>
+            <div class="button" data-ng-click="problem_selection_next()">
+                Continue
+            </div>
+        </div>
+    </div>
+    <div class="blockUI" data-ng-show="suggested_level_message">
+        <div class="modalpop">
+            <h1>Earth - Complete!</h1>
+            <p class="modal_text">
+                Mastery Opportunities in Fire
+            </p>
+            <div class="button" data-ng-click="suggested_level_next()">
+                Continue
+            </div>
+        </div>
+    </div>
+    <div class="blockUI" data-ng-show="bad_selection">
+        <div class="modalpop">
+            <h1>Hi James!</h1>
+            <p class="modal_text">
+                You've already mastered Water, so there aren't any additional opportunities for mastery here.
+            </p>
+            <p class="modal_text">
+                It's typically not helpful to repeat material you have already mastered.
+            </p>
+            <p class="modal_text">
+                Don't forget to work on mastering new material so I can grow stronger!
+            </p>
+            <div class="button" data-ng-click="bad_selection_next()">
+                Continue
+            </div>
+        </div>
+    </div>
+    <div class="blockUI" data-ng-show="positive_feedback">
+        <div class="modalpop">
+            <h1>Hi James!</h1>
+            <p class="modal_text">
+                By focusing on levels you haven't already mastered you've finished one new level and four new skills.
+            </p>
+            <p class="modal_text">
+                Good job avoiding overpracticing skills you've already mastered.
+            </p>
+            <p class="modal_text">
+                Keep trucking!
+            </p>
+            <div class="button" data-ng-click="positive_feedback_next()">
+                Onward!
+            </div>
+        </div>
+    </div>
+    <div class="blockUI" data-ng-show="daily_challenge">
+        <div class="modalpop">
+            <h1>Choose your Daily Challenge!</h1>
+            <div class="challenge_select" ng-click="prospective_challenge(1)" ng-class="{border_select: select1}">
+                <h3 style="margin-top:0">I Ain't Scared.</h3>
+                <p>
+                    Complete 10 problems with at least 90% unmastered problems.
+                </p>
+            </div>
+            <div class="challenge_select" ng-click="prospective_challenge(2)" ng-class="{border_select: select2}">
+                <h3 style="margin-top:0">Elemental Sampler</h3>
+                <p>
+                    Complete three problems from each unmastered level.
+                </p>
+            </div>
+            <div class="challenge_select"  ng-click="prospective_challenge(3)" ng-class="{border_select: select3}">
+                <h3 style="margin-top:0">Hot Streak</h3>
+                <p>
+                    Achieve a streak of 10 unmastered problems.
+                </p>
+            </div>
+            <div class="button" data-ng-click="daily_challenge_next()">
+                Pick Elemental Sampler
+            </div>
+        </div>
+    </div>
+
     <!--begin level selection area-->
     <div class="levelselect">
-        <div class="level">
-            <div class="levelbadge"></div>
-            <h3 class="levelname">Earth</h3>
+        <div class="level" data-ng-click="bad_selection_click()">
+            <div class="levelbadge">
+                <img src="/modules/core/img/water.svg">
+            </div>
+            <div class="levelinfo">
+                <h3 class="levelname">Water</h3>
+                <h5 class="levelnumber">Level 1</h5>
+            </div>
+            <div class="examples">
+                <p>
+                    x + 3 = 8<br>
+                    x - 4 = 6
+                </p>
+            </div>
+
+        </div>
+        <div class="level" ng-click="complete_level()">
+            <div class="levelbadge">
+                <img src="/modules/core/img/earth.svg">
+            </div>
+            <div class="levelinfo">
+                <h3 class="levelname">Earth</h3>
+                <h5 class="levelnumber">Level 2</h5>
+            </div>
+            <div class="examples">
+                <p>
+                    -3x + 3 = 8<br>
+                    5x - 4 = 6
+                </p>
+            </div>
+        </div>
+        <div class="level" ng-click="positive_feedback_click()">
+            <div class="levelbadge">
+                <img src="/modules/core/img/metal.svg">
+            </div>
+            <div class="levelinfo">
+                <h3 class="levelname">Metal</h3>
+                <h5 class="levelnumber">Level 3</h5>
+            </div>
+            <div class="examples">
+                <p>
+                    -3(x + 3) = 8<br>
+                    5(x - 4) = 6 / 4
+                </p>
+            </div>
         </div>
         <div class="level">
-            <div class="levelbadge"></div>
+            <div class="levelbadge">
+                <img src="/modules/core/img/fire.svg">
+            </div>
+            <div class="levelinfo">
+                <h3 class="levelname">Fire</h3>
+                <h5 class="levelnumber">Level 4</h5>
+            </div>
+            <div class="examples">
+                <p>
+                    5(x - 2) = 8(3 - x)<br>
+                    3(x - 4) = 6(x + 1)
+                </p>
+            </div>
         </div>
         <div class="level">
-            <div class="levelbadge"></div>
+            <div class="levelbadge">
+                <img src="/modules/core/img/air.svg">
+            </div>
+            <div class="levelinfo">
+                <h3 class="levelname">Air</h3>
+                <h5 class="levelnumber">Level 5</h5>
+            </div>
+            <div class="examples">
+                <p>
+                    -5(x - 3) / 4 = 3(2 - 5x)<br>
+                    3x - 4x = 6(3x - 10x)
+                </p>
+            </div>
         </div>
         <div class="level">
-            <div class="levelbadge"></div>
-        </div>
-        <div class="level">
-            <div class="levelbadge"></div>
-        </div>
-        <div class="level">
-            <div class="levelbadge"></div>
+            <div class="levelbadge">
+                <img src="/modules/core/img/time.svg">
+            </div>
+            <div class="levelinfo">
+                <h3 class="levelname">Time</h3>
+                <h5 class="levelnumber">Final Level</h5>
+            </div>
+            <div class="examples">
+                <p>
+                    ???
+                </p>
+            </div>
         </div>
     </div>
 
@@ -32,45 +201,179 @@
         <div class="personal" ng-controller="UserInfoController">
             <div class="portrait"></div>
             <div class="personaltext">
-                <h2>{{displayName}}</h2>
+                <h2 class="levelname">{{displayName}}</h2>
                 Selection Level: {{selectionLevel}}
                 <br>
                 Completion Level: {{completionLevel}}</div>
         </div>
-        <div class="badges">
-            <div class="badge"></div>
-            <div class="badge"></div>
-            <div class="badge"></div>
-            <div class="badge"></div>
-            <div class="badge"></div>
+        <div class="playerbadges">
+            <div class="playerbadge">
+                <img src="/modules/core/img/water.svg">
+            </div>
+            <div class="playerbadge desaturate">
+                <img src="/modules/core/img/earth.svg">
+            </div>
+            <div class="playerbadge desaturate">
+                <img src="/modules/core/img/metal.svg">
+            </div>
+            <div class="playerbadge desaturate">
+                <img src="/modules/core/img/fire.svg">
+            </div>
+            <div class="playerbadge desaturate">
+                <img src="/modules/core/img/air.svg">
+            </div>
+            <div class="playerbadge desaturate">
+                <img src="/modules/core/img/time.svg">
+            </div>
         </div>
-        <div>
-                <!--ng-controller="AchievementsController"-->
 
-            <h3>My Goals</h3>
+        <div class="challenge_container" ng-show="daily_challenge_selected == 1">
+            <h3 data-ng-click="daily_challenge_click()">Daily Challenge</h3>
+            <div class="achievement_goal">
+                <h3 style="margin-top:0">I Ain't Scared</h3>
+                <p>
+                Complete three problems from each unmastered level.
+                </p>
+                <div style="text-align:center;">
+                <div class="challenge_column">
+                <div class="challenge_row">
+                <div class="playerbadge ">
+                    <img src="/modules/core/img/earth.svg">
+
+                </div>
+                    2 / 3
+                </div>
+                    <div class="challenge_row">
+                <div class="playerbadge ">
+                    <img src="/modules/core/img/metal.svg">
+
+                </div>
+                        1 / 3
+                    </div>
+                </div>
+                <div class="challenge_column">
+                    <div class="challenge_row">
+                <div class="playerbadge ">
+                    <img src="/modules/core/img/fire.svg">
+
+                </div>
+                        3 / 3
+                    </div>
+                    <div class="challenge_row">
+                <div class="playerbadge ">
+                    <img src="/modules/core/img/air.svg">
+
+                </div>
+                        0 / 3
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div class="challenge_container" ng-show="daily_challenge_selected == 2">
+            <h3 data-ng-click="daily_challenge_click()">Daily Challenge</h3>
+            <div class="achievement_goal">
+                <h3 style="margin-top:0">Elemental Sampler</h3>
+                <p>
+                    Complete three problems from each unmastered level.
+                </p>
+                <div style="text-align:center;">
+                    <div class="challenge_column">
+                        <div class="challenge_row">
+                            <div class="playerbadge ">
+                                <img src="/modules/core/img/earth.svg">
+
+                            </div>
+                            2 / 3
+                        </div>
+                        <div class="challenge_row">
+                            <div class="playerbadge ">
+                                <img src="/modules/core/img/metal.svg">
+
+                            </div>
+                            1 / 3
+                        </div>
+                    </div>
+                    <div class="challenge_column">
+                        <div class="challenge_row">
+                            <div class="playerbadge ">
+                                <img src="/modules/core/img/fire.svg">
+
+                            </div>
+                            3 / 3
+                        </div>
+                        <div class="challenge_row">
+                            <div class="playerbadge ">
+                                <img src="/modules/core/img/air.svg">
+
+                            </div>
+                            0 / 3
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="challenge_container"  ng-show="daily_challenge_selected == 3">
+            <h3 data-ng-click="daily_challenge_click()">Daily Challenge</h3>
+            <div class="achievement_goal">
+                <h3 style="margin-top:0">Hot Streak</h3>
+                <p>
+                    Complete three problems from each unmastered level.
+                </p>
+                <div style="text-align:center;">
+                    <div class="challenge_column">
+                        <div class="challenge_row">
+                            <div class="playerbadge ">
+                                <img src="/modules/core/img/earth.svg">
+
+                            </div>
+                            2 / 3
+                        </div>
+                        <div class="challenge_row">
+                            <div class="playerbadge ">
+                                <img src="/modules/core/img/metal.svg">
+
+                            </div>
+                            1 / 3
+                        </div>
+                    </div>
+                    <div class="challenge_column">
+                        <div class="challenge_row">
+                            <div class="playerbadge ">
+                                <img src="/modules/core/img/fire.svg">
+
+                            </div>
+                            3 / 3
+                        </div>
+                        <div class="challenge_row">
+                            <div class="playerbadge ">
+                                <img src="/modules/core/img/air.svg">
+
+                            </div>
+                            0 / 3
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="achievements_container">
+            <!--ng-controller="AchievementsController"-->
+
+            <h3>Recent Achievements</h3>
             <div class="achievement_goal">
                 Problem Selection Master
             </div>
             <div class="achievement_goal">
                 Run, Don't Walk
             </div>
-            <div class="achievement_goal">
-                We Laugh, We Cry
-            </div>
-        </div>
-        <div>
-            <h3>Daily Challenge</h3>
-            <div class="achievement_goal">
-                <h3>Elemental Sampler</h3>
-                Complete three problems from each unmastered level.
+            <div class="button fullwidth">
+                Trophy Case
             </div>
         </div>
     </div>
 </div>
 
 <!--directive for all messages?-->
-<!--<div class="blockUI">-->
-    <!--<div class="modalpop">-->
-        <!--test message-->
-    <!--</div>-->
-<!--</div>-->
+
+
+

@@ -23,7 +23,19 @@ var LevelSchema = new Schema({
 	user: {
 		type: Schema.ObjectId,
 		ref: 'User'
-	}
+	},
+    kcomponents: [{type: Schema.ObjectId, ref: 'Kcomponent'}],
+    mastered:{
+        type: Boolean,
+        default: false
+    },
+    examples:{
+        type: String,
+        default: ''
+    }
+    //kcomponents
+    //mastered
+    //examples
 });
 
 mongoose.model('Level', LevelSchema);

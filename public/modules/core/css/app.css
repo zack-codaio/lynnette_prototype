@@ -5,11 +5,16 @@ html,body{
 padding:0;
     margin:0;
     font-family:sans-serif;
+    font-family:"museo-sans";
 
+}
+img{
+    max-height:100%;
+    max-width:100%;
 }
 
 .sidebar{
-    padding:15px;
+    padding:25px;
     position:fixed;
     top:50px;
     right:0;
@@ -19,6 +24,20 @@ padding:0;
 }
 .personal{
 
+}
+.button{
+    color:white;
+    background:#2E3092;
+    border-radius:8px;
+    text-align:center;
+    padding:15px;
+    font-size:21px;
+    width:300px;
+    margin:auto;
+
+}
+.fullwidth{
+    width:100%;
 }
 .portrait{
     width:100px;
@@ -32,13 +51,14 @@ padding:0;
 .personaltext{
     display:inline-block;
     vertical-align:middle;
+    margin-top:-20px;
 }
-.badges{
+.playerbadges{
     margin-top:20px;
     text-align:center;
     margin-bottom:10px;
 }
-.badge{
+.playerbadge{
     display:inline-block;
     height:30px;
     width:30px;
@@ -46,13 +66,46 @@ padding:0;
     border:1px solid black;
     margin-right:10px;
 }
+.desaturate{
+    -webkit-filter: brightness(0.4) saturate(0.1);
+}
+.challenge_column{
+    display:inline-block;
+    margin:auto;
+}
+
+.challenge_container{
+margin-top:30px;
+}
+
+#achievements_container{
+    margin-top:50px;
+}
 
 .achievement_goal{
     border:3px solid deepskyblue;
     border-radius:8px;
     width:100%;
+    background:white;
     margin-bottom:10px;
     padding:10px;
+}
+.challenge_select{
+    border-radius:8px;
+    width:100%;
+    background:white;
+    margin-bottom:10px;
+    padding:10px;
+}
+.border_select{
+    border:3px solid deepskyblue;
+}
+
+.challenge_row{
+    margin-top:10px;
+    margin-botom:10px;
+    padding-left:20px;
+    padding-right:20px;
 }
 
 .levelselect{
@@ -69,10 +122,10 @@ padding:0;
 
 .level{
     display:inline-block;
-    width:25%;
+    width:40%;
     margin-right:40px;
     min-width:200px;
-    min-height:300px;
+    min-height:220px;
     /*border:1px solid blue;*/
     border-radius:8px;
     background:lightgray;
@@ -81,6 +134,13 @@ padding:0;
     padding:15px;
     vertical-align:top;
 
+}
+.levelname{
+font-size:30px;
+    font-weight:bold;
+}
+.levelnumber{
+font-size:18px;
 }
 .levelbadge{
     width:80px;
@@ -91,13 +151,23 @@ padding:0;
     vertical-align:top;
     background:white;
 }
-.levelname{
+.levelinfo{
     display:inline-block;
     vertical-align:top;
+    padding-left:10px;
+    margin-top:-15px;
+}
+
+.examples{
+    text-align:center;
+    font-size:21px;
+    margin-top:15px;
+    line-height:40px;
 }
 
 .blockUI{
     position:fixed;
+    z-index:999;
     top:0;
     right:0;
     bottom:0;
@@ -113,4 +183,9 @@ padding:0;
     margin:auto;
     /*margin-top:150px;*/
     background:lightgray;
+}
+.modal_text{
+    font-size:21px;
+    margin-top:15px;
+    margin-bottom:30px;
 }
