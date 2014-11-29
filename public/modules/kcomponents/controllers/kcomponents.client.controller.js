@@ -53,6 +53,7 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
 		// Find a list of Kcomponents
 		$scope.find = function() {
 			$scope.kcomponents = Kcomponents.query();
+            console.log($scope.kcomponents);
 		};
 
 		// Find existing Kcomponent

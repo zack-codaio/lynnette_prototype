@@ -1,7 +1,7 @@
 'use strict';
 
 // Levels controller
-angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels',
+angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels', 'Kcomponents',
 	function($scope, $stateParams, $location, Authentication, Levels ) {
 		$scope.authentication = Authentication;
 
@@ -41,7 +41,14 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
 
 		// Update existing Level
 		$scope.update = function() {
+            //parse kcomponents into an array
+
+            //set $scope.level.kcomponenets equal to the array
+            var res = $scope.kcomponents.split(" ");
+            console.log(res);
+
 			var level = $scope.level ;
+            level.kcomponents = res;
 
 			level.$update(function() {
 				$location.path('levels/' + level._id);
@@ -61,6 +68,11 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
 				levelId: $stateParams.levelId
 			});
 		};
+
+        //$scope.find_kcs = function(){
+        //    $scope.kcs = kcomponents.query();
+        //    console.log($scope.kcs);
+        //}
 
         //on level complete
         $scope.complete_level = function(){
@@ -110,6 +122,7 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         $scope.daily_challenge_selected = 1;
         $scope.daily_challenge_new = $scope.daily_challenge_selected;
         $scope.select1 = true;
+        $scope.challenge_name = "I Ain't Scared";
         //daily challenge
         $scope.daily_challenge_click = function(){
             $scope.daily_challenge = true;
@@ -121,16 +134,19 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
                 $scope.select1 = true;
                 $scope.select2 = false;
                 $scope.select3 = false;
+                $scope.challenge_name = "I Ain't Scared";
             }
             if(a == 2){
                 $scope.select1 = false;
                 $scope.select2 = true;
                 $scope.select3 = false;
+                $scope.challenge_name = "Elemental Sampler";
             }
             if(a == 3){
                 $scope.select1 = false;
                 $scope.select2 = false;
                 $scope.select3 = true;
+                $scope.challenge_name = "Hot Streak";
             }
         }
         $scope.daily_challenge_next = function(){

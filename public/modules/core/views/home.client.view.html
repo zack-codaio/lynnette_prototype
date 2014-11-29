@@ -3,11 +3,14 @@
 
 
 
-<div class="maincontain" data-ng-controller="LevelsController">
+<div class="maincontain" data-ng-controller="LevelsController" data-ng-init="find_kcs()">
 
     <!--modal dialogues-->
     <div class="blockUI" data-ng-show="level_complete_message">
         <div class="modalpop">
+            <div class="level_complete_badge">
+            <img src="/modules/core/img/earth.svg">
+            </div>
             <h1>Congratulations!</h1>
             <p class="modal_text">
                 You have completed Level 1 and earned the Earth badge!
@@ -20,8 +23,39 @@
     <div class="blockUI" data-ng-show="problem_selection_message">
         <div class="modalpop">
             <h1>Problem Selection Rating</h1>
+            <div style="height:50px;">
+                <img src="/modules/core/img/star.svg" class="star">
+                <img src="/modules/core/img/star.svg" class="star">
+                <img src="/modules/core/img/star.svg" class="star">
+                <img src="/modules/core/img/star.svg" class="star">
+                <img src="/modules/core/img/star.svg" class="star">
+            </div>
             <p class="modal_text">
                 You solved 10 problems, two of which did not help you toward mastery.
+            </p>
+            <p class="modal_text">
+                Can you identify which problems you could have skipped?  Click on the problems that did not have mastery opportunities.
+            </p>
+            <div class="challenge_column">
+                <p class="level_history">
+                1. Earth<br>
+                2. Fire<br>
+                3. Earth<br>
+                4. Earth<br>
+                5. Water<br>
+                </p>
+            </div>
+            <div class="challenge_column">
+                <p class="level_history">
+                6. Earth<br>
+                7. Water<br>
+                8. Fire<br>
+                9. Earth<br>
+                10. Earth<br>
+                </p>
+            </div>
+            <p class="modal_text greentext">
+                Correct! The two Water problems (5 and 7) did not have additional mastery opportunities.
             </p>
             <div class="button" data-ng-click="problem_selection_next()">
                 Continue
@@ -40,7 +74,11 @@
         </div>
     </div>
     <div class="blockUI" data-ng-show="bad_selection">
-        <div class="modalpop">
+        <div class="modalpop bluebackground">
+            <div class="char_background">
+                <div class="portrait"></div>
+            </div>
+            <div class="char_dialogue">
             <h1>Hi James!</h1>
             <p class="modal_text">
                 You've already mastered Water, so there aren't any additional opportunities for mastery here.
@@ -51,13 +89,19 @@
             <p class="modal_text">
                 Don't forget to work on mastering new material so I can grow stronger!
             </p>
-            <div class="button" data-ng-click="bad_selection_next()">
+                <div class="button button-inline button-discouraged" data-ng-click="bad_selection_next()">Continue with Water</div>
+            <div class="button button-inline" data-ng-click="bad_selection_next()">
                 Continue
+            </div>
             </div>
         </div>
     </div>
     <div class="blockUI" data-ng-show="positive_feedback">
-        <div class="modalpop">
+        <div class="modalpop bluebackground">
+            <div class="char_background">
+                <div class="portrait"></div>
+            </div>
+            <div class="char_dialogue">
             <h1>Hi James!</h1>
             <p class="modal_text">
                 By focusing on levels you haven't already mastered you've finished one new level and four new skills.
@@ -70,6 +114,7 @@
             </p>
             <div class="button" data-ng-click="positive_feedback_next()">
                 Onward!
+            </div>
             </div>
         </div>
     </div>
@@ -95,7 +140,7 @@
                 </p>
             </div>
             <div class="button" data-ng-click="daily_challenge_next()">
-                Pick Elemental Sampler
+                Pick {{challenge_name}}
             </div>
         </div>
     </div>
@@ -110,6 +155,7 @@
                 <h3 class="levelname">Water</h3>
                 <h5 class="levelnumber">Level 1</h5>
             </div>
+
             <div class="examples">
                 <p>
                     x + 3 = 8<br>
@@ -232,41 +278,11 @@
             <div class="achievement_goal">
                 <h3 style="margin-top:0">I Ain't Scared</h3>
                 <p>
-                Complete three problems from each unmastered level.
+                Complete 10 problems with at least 90% unmastered problems.
                 </p>
-                <div style="text-align:center;">
-                <div class="challenge_column">
-                <div class="challenge_row">
-                <div class="playerbadge ">
-                    <img src="/modules/core/img/earth.svg">
-
-                </div>
-                    2 / 3
-                </div>
-                    <div class="challenge_row">
-                <div class="playerbadge ">
-                    <img src="/modules/core/img/metal.svg">
-
-                </div>
-                        1 / 3
-                    </div>
-                </div>
-                <div class="challenge_column">
-                    <div class="challenge_row">
-                <div class="playerbadge ">
-                    <img src="/modules/core/img/fire.svg">
-
-                </div>
-                        3 / 3
-                    </div>
-                    <div class="challenge_row">
-                <div class="playerbadge ">
-                    <img src="/modules/core/img/air.svg">
-
-                </div>
-                        0 / 3
-                    </div>
-                </div>
+                <div style="text-align:left;font-size:28px;">
+                    Problems complete: 6<br>
+                    Unmastered: 88%
                 </div>
             </div>
         </div>
@@ -318,41 +334,10 @@
             <div class="achievement_goal">
                 <h3 style="margin-top:0">Hot Streak</h3>
                 <p>
-                    Complete three problems from each unmastered level.
+                    Achieve a streak of 10 unmastered problems.
                 </p>
-                <div style="text-align:center;">
-                    <div class="challenge_column">
-                        <div class="challenge_row">
-                            <div class="playerbadge ">
-                                <img src="/modules/core/img/earth.svg">
-
-                            </div>
-                            2 / 3
-                        </div>
-                        <div class="challenge_row">
-                            <div class="playerbadge ">
-                                <img src="/modules/core/img/metal.svg">
-
-                            </div>
-                            1 / 3
-                        </div>
-                    </div>
-                    <div class="challenge_column">
-                        <div class="challenge_row">
-                            <div class="playerbadge ">
-                                <img src="/modules/core/img/fire.svg">
-
-                            </div>
-                            3 / 3
-                        </div>
-                        <div class="challenge_row">
-                            <div class="playerbadge ">
-                                <img src="/modules/core/img/air.svg">
-
-                            </div>
-                            0 / 3
-                        </div>
-                    </div>
+                <div style="text-align:center;font-size:36px;">
+                    3 / 10
                 </div>
             </div>
         </div>
