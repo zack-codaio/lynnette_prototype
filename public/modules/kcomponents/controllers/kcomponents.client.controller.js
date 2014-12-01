@@ -60,7 +60,15 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
             var kcomponent = new Kcomponents (
                 $scope.updateKC
             );
-            kcomponent.percentComplete = kcomponent.percentComplete + 1;
+            kcomponent.percentComplete = Math.round(kcomponent.percentComplete + getRandomArbitrary(5, 25));
+            function getRandomArbitrary(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            if(kcomponent.percentComplete >= 100){
+                kcomponent.percentComplete = 100;
+                kcomponent.mastered = true;
+            }
 
             kcomponent.$update(function() {
                 //$location.path('kcomponents/' + $scope.updateKC._id);

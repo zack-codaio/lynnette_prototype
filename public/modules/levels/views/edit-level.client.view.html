@@ -10,9 +10,25 @@
                     <div class="controls">
                         <input type="text" data-ng-model="level.name" id="name" class="form-control" placeholder="Name" required>
                     </div>
-                    <label class="control-label" for="kcomponents">KCs</label>
+                    <label class="control-label" for="kcomponentList">KCs (space separated)</label>
                     <div class="controls">
-                        <input type="text" data-ng-model="kcomponents" id="kcomponents" class="form-control" placeholder="kcomponents" required>
+                        <input type="text" data-ng-model="level.kcomponentList" id="kcomponentList" class="form-control" placeholder="kcomponents" required>
+                    </div>
+                    <label class="control-label" for="leveltype">Level Type</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="level.leveltype" id="leveltype" class="form-control" placeholder="Fire" required>
+                    </div>
+                    <label class="control-label" for="icon">Icon Path</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="level.icon" id="icon" class="form-control" placeholder="icon path" required>
+                    </div>
+                    <label class="control-label" for="example1">Example 1</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="level.example1" id="example1" class="form-control" placeholder="x + 3 = 5" required>
+                    </div>
+                    <label class="control-label" for="example2">Example 2</label>
+                    <div class="controls">
+                        <input type="text" data-ng-model="level.example2" id="example2" class="form-control" placeholder="x + 3 = 5" required>
                     </div>
                 </div>
 

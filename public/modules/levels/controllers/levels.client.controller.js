@@ -9,7 +9,11 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         $scope.create = function () {
             // Create new Level object
             var level = new Levels({
-                name: this.name
+                name: this.name,
+                leveltype: this.leveltype,
+                icon: this.icon,
+                example1: this.example1,
+                example2: this.example2
             });
 
             // Redirect after save
@@ -45,11 +49,14 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             //parse kcomponents into an array
 
             //set $scope.level.kcomponenets equal to the array
-            var res = $scope.kcomponents.split(" ");
+            if($scope.level.kcomponentList.length > 3){
+            var res = $scope.level.kcomponentList.split(" ");
             console.log(res);
 
             var level = $scope.level;
             level.kcomponents = res;
+                delete level.kcomponentList;
+            }
 
             level.$update(function () {
                 $location.path('levels/' + level._id);
@@ -67,7 +74,16 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         $scope.findOne = function () {
             $scope.level = Levels.get({
                 levelId: $stateParams.levelId
+            }, function(){
+                $scope.level.kcomponentList = "";
+                console.log($scope.level);
+                for(var i = 0; i < $scope.level.kcomponents.length; i++){
+                    $scope.level.kcomponentList = $scope.level.kcomponentList + $scope.level.kcomponents[i] + " ";
+                }
+                $scope.level.kcomponentList = $scope.level.kcomponentList.substr(0, $scope.level.kcomponentList.length-1);
             });
+
+
         };
 
         //$scope.find_kcs = function(){
@@ -167,6 +183,11 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
                 $scope.find();
             }, 500);
         });
+
+        $scope.select_level = function(levelindex){
+            console.log("select_level("+levelindex+")");
+            $rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents});
+        }
     }
 ]).directive('myKc', function(){
     console.log();

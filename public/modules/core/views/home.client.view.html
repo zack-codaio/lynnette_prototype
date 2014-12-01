@@ -147,12 +147,12 @@
 
     <!--begin level selection area-->
     <div class="levelselect">
-        <div class="level" ng-repeat="level in levels | orderBy:'created':false">
+        <div class="level" ng-repeat="level in levels | orderBy:'created':false" ng-click="select_level($index)">
             <div class="levelbadge">
-                <img src="/modules/core/img/water.svg">
+                <img src="/modules/core/img/{{level.icon}}.svg">
             </div>
             <div class="levelinfo">
-                <h3 class="levelname">Water</h3>
+                <h3 class="levelname">{{level.leveltype}}</h3>
                 <h5 class="levelnumber">{{level.name}}</h5>
             </div>
 
@@ -165,8 +165,8 @@
 
             <div class="examples">
                 <p>
-                    x + 3 = 8<br>
-                    x - 4 = 6
+                    {{level.example1}}<br>
+                    {{level.example2}}
                 </p>
             </div>
 

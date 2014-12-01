@@ -16,6 +16,16 @@ var LevelSchema = new Schema({
 		required: 'Please fill Level name',
 		trim: true
 	},
+    leveltype:{
+      type: String,
+        default: '',
+        trim:true
+    },
+    icon:{
+        type: String,
+        default: '',
+        trim:true
+    },
 	created: {
 		type: Date,
 		default: Date.now
@@ -32,6 +42,16 @@ var LevelSchema = new Schema({
     examples:{
         type: String,
         default: ''
+    },
+    example1:{
+        type: String,
+        default: '',
+        trim:true
+    },
+    example2:{
+        type: String,
+        default: '',
+        trim:true
     }
     //kcomponents
     //mastered
