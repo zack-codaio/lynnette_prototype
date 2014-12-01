@@ -70,12 +70,24 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             $scope.levels = Levels.query();
             $scope.levels.$promise.then(function(result){
 
+                console.log("scope");
+                console.log($scope.levels);
+                console.log("result");
+                console.log(result);
 
             //look for mismatch of mastered and kcs
             console.log($scope.levels);
             for(var i = 0; i < $scope.levels.length; i++){
                 //check level mastered
-                var levelmastered = $scope.levels[i].mastered;
+
+                var curlevel = $scope.levels[i];
+                console.log(curlevel);
+                console.log("scope mastered " + curlevel.mastered);
+                //var levelmastered = $scope.levels[i].mastered;
+                var levelmastered = result[i].mastered;
+                //var levelmastered = true;
+                console.log("levelmastered "+i+" "+levelmastered);
+
                 //check kc mastered for each kc
                 var kcmastered = true;
                 for(var j = 0; j < $scope.levels[i].kcomponents.length; j++){
@@ -84,25 +96,39 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
                     }
                 }
                 //if all kc's mastered and level mastered is false
+
                 if(levelmastered == false && kcmastered == true){
                     //update level mastered
                     $scope.levels[i].mastered = true;
                     //update to DB
+                    for(var k = 0; k < $scope.levels[i].kcomponents.length; k++){
+                        $scope.levels[i].kcomponents[k] = $scope.levels[i].kcomponents[k]._id;
+                    }
+                    $scope.levels[i].user = $scope.levels[i].user._id;
+
                     $scope.levels[i]
                         .$update(function () {
-                            //$location.path('levels/' + level._id);
+                            $scope.find();
                         }, function (errorResponse) {
                             $scope.error = errorResponse.data.message;
+                            console.log($scope.error);
                         });
                     //trigger level complete popup
                     $scope.$emit("levelmastered", {levelid: i});
                     console.log("levelmastered " + i);
                 }
-                else if(kcmastered = false){
+                else if(kcmastered == false && levelmastered == true){
                     $scope.levels[i].mastered = false;
+
                     //update to DB
+                    for(var k = 0; k < $scope.levels[i].kcomponents.length; k++){
+                        $scope.levels[i].kcomponents[k] = $scope.levels[i].kcomponents[k]._id;
+                    }
+                    $scope.levels[i].user = $scope.levels[i].user._id;
+
                     $scope.levels[i]
                         .$update(function () {
+                            $scope.find();
                         }, function (errorResponse) {
                             $scope.error = errorResponse.data.message;
                         });
@@ -135,7 +161,9 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         }
         $scope.$on('levelmastered', function(args){
             var levelid = args.levelid;
+            console.log("level "+levelid+" completed");
             $scope.level_complete_message = true;
+            $scope.$apply();
 
         });
         $scope.level_complete_next = function () {
