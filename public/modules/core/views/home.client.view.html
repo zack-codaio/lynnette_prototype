@@ -158,7 +158,9 @@
 
             <div class="kcs" ng-repeat="kc in level.kcomponents">
                 <!--<div class="kcs" ng-repeat="kc in level.kcomponents" data-ng-controller="KcomponentsController" data-ng-init="findOneArgs({{kc._id}})">-->
-                {{kc.name}} {{kc.percentComplete}}
+                <div class="kc_single">
+                {{kc.name}}: {{kc.percentComplete}}%
+                </div>
                 <my-kc info="{{kc._id}} "></my-kc>
 
             </div>

@@ -60,7 +60,7 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
             var kcomponent = new Kcomponents (
                 $scope.updateKC
             );
-            kcomponent.percentComplete = Math.round(kcomponent.percentComplete + getRandomArbitrary(5, 25));
+            kcomponent.percentComplete = Math.round(kcomponent.percentComplete + getRandomArbitrary(0, 25));
             function getRandomArbitrary(min, max) {
                 return Math.random() * (max - min) + min;
             }
@@ -115,5 +115,23 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
             //instead of apply, emit back to the other controller so it knows to $apply
             $scope.$emit('KCupdated', {});
         });
+
+        $scope.reset_kcs = function(){
+            console.log('resetting kcs');
+            //for all kcs
+            console.log($scope);
+            for(var i = 0; i < $scope.kcomponents.length; i++){
+                //set all mastered to false
+                //set all percentCompletes to 25
+                $scope.kcomponents[i].mastered = false;
+                $scope.kcomponents[i].percentComplete = 25;
+                //console.log($scope.kcomponents[i]);
+                $scope.kcomponents[i].$update(function(response) {
+                }, function(errorResponse) {
+                    $scope.error = errorResponse.data.message;
+                });
+            }
+
+        }
 	}
 ]);

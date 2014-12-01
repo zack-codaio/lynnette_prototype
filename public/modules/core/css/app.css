@@ -150,7 +150,7 @@ margin-top:30px;
     width:40%;
     margin-right:40px;
     min-width:200px;
-    min-height:220px;
+    min-height:315px;
     /*border:1px solid blue;*/
     border-radius:8px;
     background:lightgray;
@@ -175,6 +175,7 @@ font-size:18px;
     display:inline-block;
     vertical-align:top;
     background:white;
+    margin-bottom:10px;
 }
 .levelinfo{
     display:inline-block;
@@ -182,7 +183,10 @@ font-size:18px;
     padding-left:10px;
     margin-top:-15px;
 }
-
+.kc_single{
+    text-align:left;
+    padding:5px;
+}
 .examples{
     text-align:center;
     font-size:21px;

@@ -121,6 +121,11 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             console.log("bad selection");
             $scope.bad_selection = true;
         }
+        $scope.$on('alreadymastered', function(){
+            console.log("bad selection");
+            $scope.bad_selection = true;
+        });
+
         $scope.bad_selection_next = function () {
             $scope.bad_selection = false;
         }
@@ -186,7 +191,22 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
 
         $scope.select_level = function(levelindex){
             console.log("select_level("+levelindex+")");
-            $rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents});
+            //check if mastered
+            var mastered = true;
+            for(var i = 0; i < $scope.levels[levelindex].kcomponents.length; i++){
+                if($scope.levels[levelindex].kcomponents[i].mastered == false){
+                    mastered = false;
+                }
+            }
+            if(mastered == true){
+                console.log('already mastered');
+                $scope.$broadcast('alreadymastered', {});
+            }
+            else if(mastered == false){
+                $rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents});
+            }
+
+
         }
     }
 ]).directive('myKc', function(){
