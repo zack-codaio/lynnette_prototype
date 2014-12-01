@@ -1,73 +1,74 @@
 'use strict';
 
 // Levels controller
-angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels', 'Kcomponents',
-	function($scope, $stateParams, $location, Authentication, Levels ) {
-		$scope.authentication = Authentication;
+angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels', '$rootScope',
+    function ($scope, $stateParams, $location, Authentication, Levels, $rootScope) {
+        $scope.authentication = Authentication;
 
-		// Create new Level
-		$scope.create = function() {
-			// Create new Level object
-			var level = new Levels ({
-				name: this.name
-			});
+        // Create new Level
+        $scope.create = function () {
+            // Create new Level object
+            var level = new Levels({
+                name: this.name
+            });
 
-			// Redirect after save
-			level.$save(function(response) {
-				$location.path('levels/' + response._id);
+            // Redirect after save
+            level.$save(function (response) {
+                $location.path('levels/' + response._id);
 
-				// Clear form fields
-				$scope.name = '';
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
 
-		// Remove existing Level
-		$scope.remove = function( level ) {
-			if ( level ) { level.$remove();
+        // Remove existing Level
+        $scope.remove = function (level) {
+            if (level) {
+                level.$remove();
 
-				for (var i in $scope.levels ) {
-					if ($scope.levels [i] === level ) {
-						$scope.levels.splice(i, 1);
-					}
-				}
-			} else {
-				$scope.level.$remove(function() {
-					$location.path('levels');
-				});
-			}
-		};
+                for (var i in $scope.levels) {
+                    if ($scope.levels [i] === level) {
+                        $scope.levels.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.level.$remove(function () {
+                    $location.path('levels');
+                });
+            }
+        };
 
-		// Update existing Level
-		$scope.update = function() {
+        // Update existing Level
+        $scope.update = function () {
             //parse kcomponents into an array
 
             //set $scope.level.kcomponenets equal to the array
             var res = $scope.kcomponents.split(" ");
             console.log(res);
 
-			var level = $scope.level ;
+            var level = $scope.level;
             level.kcomponents = res;
 
-			level.$update(function() {
-				$location.path('levels/' + level._id);
-			}, function(errorResponse) {
-				$scope.error = errorResponse.data.message;
-			});
-		};
+            level.$update(function () {
+                $location.path('levels/' + level._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
 
-		// Find a list of Levels
-		$scope.find = function() {
-			$scope.levels = Levels.query();
-		};
+        // Find a list of Levels
+        $scope.find = function () {
+            $scope.levels = Levels.query();
+        };
 
-		// Find existing Level
-		$scope.findOne = function() {
-			$scope.level = Levels.get({ 
-				levelId: $stateParams.levelId
-			});
-		};
+        // Find existing Level
+        $scope.findOne = function () {
+            $scope.level = Levels.get({
+                levelId: $stateParams.levelId
+            });
+        };
 
         //$scope.find_kcs = function(){
         //    $scope.kcs = kcomponents.query();
@@ -75,46 +76,45 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         //}
 
         //on level complete
-        $scope.complete_level = function(){
+        $scope.complete_level = function () {
             console.log("level completed");
             $scope.level_complete_message = true;
         }
-        $scope.level_complete_next = function(){
+        $scope.level_complete_next = function () {
             console.log("level complete next");
             $scope.level_complete_message = false;
             $scope.problem_selection_rating();
         }
-        $scope.problem_selection_rating = function(){
+        $scope.problem_selection_rating = function () {
             console.log("problem selection rating show");
             $scope.problem_selection_message = true;
         }
-        $scope.problem_selection_next = function(){
+        $scope.problem_selection_next = function () {
             console.log("problem selection next");
             $scope.problem_selection_message = false;
             $scope.suggested_level_message = true;
         }
-        $scope.suggested_level_next = function(){
+        $scope.suggested_level_next = function () {
             $scope.suggested_level_message = false;
 
         }
 
 
-
         //on bad level selection
-        $scope.bad_selection_click = function(){
+        $scope.bad_selection_click = function () {
             console.log("bad selection");
             $scope.bad_selection = true;
         }
-        $scope.bad_selection_next = function(){
+        $scope.bad_selection_next = function () {
             $scope.bad_selection = false;
         }
 
         //on good level selection
-        $scope.positive_feedback_click = function(){
+        $scope.positive_feedback_click = function () {
             $scope.positive_feedback = true;
 
         }
-        $scope.positive_feedback_next = function(){
+        $scope.positive_feedback_next = function () {
             $scope.positive_feedback = false;
         }
 
@@ -124,34 +124,58 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         $scope.select1 = true;
         $scope.challenge_name = "I Ain't Scared";
         //daily challenge
-        $scope.daily_challenge_click = function(){
+        $scope.daily_challenge_click = function () {
             $scope.daily_challenge = true;
         }
-        $scope.prospective_challenge = function(a){
+        $scope.prospective_challenge = function (a) {
             $scope.daily_challenge_new = a;
 
-            if(a == 1){
+            if (a == 1) {
                 $scope.select1 = true;
                 $scope.select2 = false;
                 $scope.select3 = false;
                 $scope.challenge_name = "I Ain't Scared";
             }
-            if(a == 2){
+            if (a == 2) {
                 $scope.select1 = false;
                 $scope.select2 = true;
                 $scope.select3 = false;
                 $scope.challenge_name = "Elemental Sampler";
             }
-            if(a == 3){
+            if (a == 3) {
                 $scope.select1 = false;
                 $scope.select2 = false;
                 $scope.select3 = true;
                 $scope.challenge_name = "Hot Streak";
             }
         }
-        $scope.daily_challenge_next = function(){
+        $scope.daily_challenge_next = function () {
             $scope.daily_challenge = false;
             $scope.daily_challenge_selected = $scope.daily_challenge_new;
         }
-	}
-]);
+
+        $scope.air_click = function () {
+            console.log($scope);
+            $rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[4].kcomponents});
+        }
+
+        $scope.$on('KCupdated', function(){
+            console.log("received KCupdated");
+
+            //hacky but it works?
+            setTimeout(function(){
+                $scope.find();
+            }, 500);
+        });
+    }
+]).directive('myKc', function(){
+    console.log();
+
+    //return{
+    //    restrict: 'E',
+    //    scope: {
+    //        id: '=info'
+    //    },
+    //    template: 'ID: {{id}}'
+    //};
+});

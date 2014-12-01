@@ -1,8 +1,8 @@
 'use strict';
 
 // Kcomponents controller
-angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Kcomponents',
-	function($scope, $stateParams, $location, Authentication, Kcomponents ) {
+angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Kcomponents', '$rootScope',
+	function($scope, $stateParams, $location, Authentication, Kcomponents, $rootScope ) {
 		$scope.authentication = Authentication;
 
 		// Create new Kcomponent
@@ -43,12 +43,32 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
 		$scope.update = function() {
 			var kcomponent = $scope.kcomponent ;
 
+
 			kcomponent.$update(function() {
 				$location.path('kcomponents/' + kcomponent._id);
 			}, function(errorResponse) {
 				$scope.error = errorResponse.data.message;
 			});
 		};
+
+        // Update existing Kcomponent within scope
+        $scope.updateWithin = function() {
+            //var kcomponent = $scope.updateKC ;
+            console.log(kcomponent);
+            //$scope.findOneArg($scope.updateKC._id);
+
+            var kcomponent = new Kcomponents (
+                $scope.updateKC
+            );
+            kcomponent.percentComplete = kcomponent.percentComplete + 1;
+
+            kcomponent.$update(function() {
+                //$location.path('kcomponents/' + $scope.updateKC._id);
+
+            }, function(errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
 
 		// Find a list of Kcomponents
 		$scope.find = function() {
@@ -60,7 +80,32 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
 		$scope.findOne = function() {
 			$scope.kcomponent = Kcomponents.get({ 
 				kcomponentId: $stateParams.kcomponentId
+
 			});
+            console.log($stateParams.kcomponentId);
 		};
+
+        // Find existing Kcomponent
+        $scope.findOneArg = function(id) {
+            $scope.updateKC = Kcomponents.get({
+                kcomponentId: id
+            });
+            console.log($scope.updateKC);
+        };
+
+        $scope.$on('KCbroadcast', function(event, args){
+            console.log("received KCbroadcast:");
+            console.log(args);
+            for(var i = 0; i < args.kcs.length; i++){
+                var kcomponent = args.kcs[i];
+
+                $scope.updateKC = kcomponent;
+                $scope.updateWithin();
+            }
+
+                //$scope.$apply();
+            //instead of apply, emit back to the other controller so it knows to $apply
+            $scope.$emit('KCupdated', {});
+        });
 	}
 ]);

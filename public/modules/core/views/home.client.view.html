@@ -3,7 +3,7 @@
 
 
 
-<div class="maincontain" data-ng-controller="LevelsController" data-ng-init="find_kcs()">
+<div class="maincontain" data-ng-controller="LevelsController" data-ng-init="find()">
 
     <!--modal dialogues-->
     <div class="blockUI" data-ng-show="level_complete_message">
@@ -147,6 +147,33 @@
 
     <!--begin level selection area-->
     <div class="levelselect">
+        <div class="level" ng-repeat="level in levels | orderBy:'created':false">
+            <div class="levelbadge">
+                <img src="/modules/core/img/water.svg">
+            </div>
+            <div class="levelinfo">
+                <h3 class="levelname">Water</h3>
+                <h5 class="levelnumber">{{level.name}}</h5>
+            </div>
+
+            <div class="kcs" ng-repeat="kc in level.kcomponents">
+                <!--<div class="kcs" ng-repeat="kc in level.kcomponents" data-ng-controller="KcomponentsController" data-ng-init="findOneArgs({{kc._id}})">-->
+                {{kc.name}} {{kc.percentComplete}}
+                <my-kc info="{{kc._id}} "></my-kc>
+
+            </div>
+
+            <div class="examples">
+                <p>
+                    x + 3 = 8<br>
+                    x - 4 = 6
+                </p>
+            </div>
+
+        </div>
+
+
+
         <div class="level" data-ng-click="bad_selection_click()">
             <div class="levelbadge">
                 <img src="/modules/core/img/water.svg">
@@ -209,7 +236,7 @@
                 </p>
             </div>
         </div>
-        <div class="level">
+        <div class="level" data-ng-click="air_click()">
             <div class="levelbadge">
                 <img src="/modules/core/img/air.svg">
             </div>
@@ -217,7 +244,10 @@
                 <h3 class="levelname">Air</h3>
                 <h5 class="levelnumber">Level 5</h5>
             </div>
-            <div class="examples">
+            <div class="kcs" ng-repeat="kc in level.kcomponents">
+                asdf
+            </div>
+            <div class="examples" data-ng-controller="KcomponentsController">
                 <p>
                     -5(x - 3) / 4 = 3(2 - 5x)<br>
                     3x - 4x = 6(3x - 10x)
