@@ -68,6 +68,48 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         // Find a list of Levels
         $scope.find = function () {
             $scope.levels = Levels.query();
+            $scope.levels.$promise.then(function(result){
+
+
+            //look for mismatch of mastered and kcs
+            console.log($scope.levels);
+            for(var i = 0; i < $scope.levels.length; i++){
+                //check level mastered
+                var levelmastered = $scope.levels[i].mastered;
+                //check kc mastered for each kc
+                var kcmastered = true;
+                for(var j = 0; j < $scope.levels[i].kcomponents.length; j++){
+                    if($scope.levels[i].kcomponents[j].mastered == false){
+                        kcmastered = false;
+                    }
+                }
+                //if all kc's mastered and level mastered is false
+                if(levelmastered == false && kcmastered == true){
+                    //update level mastered
+                    $scope.levels[i].mastered = true;
+                    //update to DB
+                    $scope.levels[i]
+                        .$update(function () {
+                            //$location.path('levels/' + level._id);
+                        }, function (errorResponse) {
+                            $scope.error = errorResponse.data.message;
+                        });
+                    //trigger level complete popup
+                    $scope.$emit("levelmastered", {levelid: i});
+                    console.log("levelmastered " + i);
+                }
+                else if(kcmastered = false){
+                    $scope.levels[i].mastered = false;
+                    //update to DB
+                    $scope.levels[i]
+                        .$update(function () {
+                        }, function (errorResponse) {
+                            $scope.error = errorResponse.data.message;
+                        });
+                }
+
+            }
+            });
         };
 
         // Find existing Level
@@ -86,16 +128,16 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
 
         };
 
-        //$scope.find_kcs = function(){
-        //    $scope.kcs = kcomponents.query();
-        //    console.log($scope.kcs);
-        //}
-
         //on level complete
         $scope.complete_level = function () {
             console.log("level completed");
             $scope.level_complete_message = true;
         }
+        $scope.$on('levelmastered', function(args){
+            var levelid = args.levelid;
+            $scope.level_complete_message = true;
+
+        });
         $scope.level_complete_next = function () {
             console.log("level complete next");
             $scope.level_complete_message = false;
