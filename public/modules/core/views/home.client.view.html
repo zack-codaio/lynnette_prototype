@@ -284,24 +284,10 @@
                 <br>
                 Completion Level: {{completionLevel}}</div>
         </div>
+
         <div class="playerbadges">
-            <div class="playerbadge">
-                <img src="/modules/core/img/water.svg">
-            </div>
-            <div class="playerbadge desaturate">
-                <img src="/modules/core/img/earth.svg">
-            </div>
-            <div class="playerbadge desaturate">
-                <img src="/modules/core/img/metal.svg">
-            </div>
-            <div class="playerbadge desaturate">
-                <img src="/modules/core/img/fire.svg">
-            </div>
-            <div class="playerbadge desaturate">
-                <img src="/modules/core/img/air.svg">
-            </div>
-            <div class="playerbadge desaturate">
-                <img src="/modules/core/img/time.svg">
+            <div class="playerbadge" ng-repeat="level in levels | orderBy:'created':false" ng-class="{desaturate: !level.mastered, badge_earned: select1}">
+                <img src="/modules/core/img/{{level.icon}}.svg">
             </div>
         </div>
 

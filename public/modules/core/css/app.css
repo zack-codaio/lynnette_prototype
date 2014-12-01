@@ -125,6 +125,9 @@ margin-top:30px;
 .border_select{
     border:3px solid deepskyblue;
 }
+.badge_earned{
+    border:1px solid deepskyblue;
+}
 
 .challenge_row{
     margin-top:10px;
