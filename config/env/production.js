@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	db: "mongodb://testuser:testuser@dogen.mongohq.com:10097/mean-dev" || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/mean',
+	db: "mongodb://testuser:testuser@dogen.mongohq.com:10090/app32156117" || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/mean',
     //db: process.env.MONGOHQ_URL || process.env.MONGOLAB_URI || 'mongodb://' + (process.env.DB_1_PORT_27017_TCP_ADDR || 'localhost') + '/mean',
 	log: {
 		// Can specify one of 'combined', 'common', 'dev', 'short', 'tiny'
