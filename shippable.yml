@@ -6,4 +6,4 @@ env:
 services:
   - mongodb
 after success:
-  - git push git@heroku.com:lynnette-prototype.git master
+  - git push -f git@heroku.com:lynnette-prototype.git master
