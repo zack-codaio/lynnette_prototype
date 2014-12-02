@@ -51,7 +51,7 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             //set $scope.level.kcomponenets equal to the array
             if($scope.level.kcomponentList.length > 3){
             var res = $scope.level.kcomponentList.split(" ");
-            console.log(res);
+            //console.log(res);
 
             var level = $scope.level;
             level.kcomponents = res;
@@ -70,23 +70,15 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             $scope.levels = Levels.query();
             $scope.levels.$promise.then(function(result){
 
-                console.log("scope");
-                console.log($scope.levels);
-                console.log("result");
-                console.log(result);
-
             //look for mismatch of mastered and kcs
             console.log($scope.levels);
             for(var i = 0; i < $scope.levels.length; i++){
                 //check level mastered
 
                 var curlevel = $scope.levels[i];
-                console.log(curlevel);
-                console.log("scope mastered " + curlevel.mastered);
-                //var levelmastered = $scope.levels[i].mastered;
+                //console.log("scope mastered " + curlevel.mastered);
                 var levelmastered = result[i].mastered;
-                //var levelmastered = true;
-                console.log("levelmastered "+i+" "+levelmastered);
+                //console.log("levelmastered "+i+" "+levelmastered);
 
                 //check kc mastered for each kc
                 var kcmastered = true;
@@ -150,8 +142,20 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
                 }
                 $scope.level.kcomponentList = $scope.level.kcomponentList.substr(0, $scope.level.kcomponentList.length-1);
             });
+        };
 
-
+        // Find existing Level
+        $scope.findOneID = function (levelId) {
+            $scope.level = Levels.get({
+                levelId: levelId
+            }, function(){
+                $scope.level.kcomponentList = "";
+                console.log($scope.level);
+                for(var i = 0; i < $scope.level.kcomponents.length; i++){
+                    $scope.level.kcomponentList = $scope.level.kcomponentList + $scope.level.kcomponents[i] + " ";
+                }
+                $scope.level.kcomponentList = $scope.level.kcomponentList.substr(0, $scope.level.kcomponentList.length-1);
+            });
         };
 
         //on level complete
@@ -271,9 +275,11 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             if(mastered == true){
                 console.log('already mastered');
                 $scope.$broadcast('alreadymastered', {});
+                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: true});
             }
             else if(mastered == false){
                 $rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents});
+                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: false});
             }
 
 

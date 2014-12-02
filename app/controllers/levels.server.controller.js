@@ -73,7 +73,7 @@ exports.delete = function(req, res) {
  * List of Levels
  */
 exports.list = function(req, res) { Level.find().sort('created').populate('user', 'displayName').populate('kcomponents').exec(function(err, levels) {
-        console.log(levels);
+        //console.log(levels);
 		if (err) {
 			return res.status(400).send({
 				message: errorHandler.getErrorMessage(err)
