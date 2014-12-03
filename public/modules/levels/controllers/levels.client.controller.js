@@ -5,6 +5,8 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
     function ($scope, $stateParams, $location, Authentication, Levels, $rootScope) {
         $scope.authentication = Authentication;
 
+        $scope.masteredLevel;
+
         // Create new Level
         $scope.create = function () {
             // Create new Level object
@@ -163,13 +165,13 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             console.log("level completed");
             $scope.level_complete_message = true;
         }
-        $scope.$on('levelmastered', function(args){
-            var levelid = args.levelid;
-            console.log("level "+levelid+" completed");
-            $scope.level_complete_message = true;
-            $scope.$apply();
-
-        });
+        //$scope.$on('levelmastered', function(event, data){
+        //    var levelid = args.levelid;
+        //    console.log("level "+levelid+" completed");
+        //
+        //    $scope.$apply();
+        //
+        //});
         $scope.level_complete_next = function () {
             console.log("level complete next");
             $scope.level_complete_message = false;
@@ -281,9 +283,17 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
                 $rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents});
                 $rootScope.$broadcast('levelselect', {level: levelindex, mastered: false});
             }
-
-
         }
+
+        $scope.$on('levelmastered', function(event, data){
+            console.log('LevelsClientController received levelmastered');
+            console.log('levelid = '+data.levelid);
+
+            $scope.level_complete_message = true;
+
+            $scope.masteredLevel = $scope.levels[data.levelid];
+            console.log($scope.masteredLevel);
+        });
     }
 ]).directive('myKc', function(){
     console.log();

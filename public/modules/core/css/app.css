@@ -207,6 +207,8 @@ font-size:18px;
     background: rgba(0,0,0,.8);
     padding-top:130px;
     text-align:center;
+    overflow:scroll;
+    padding-bottom:130px;
 }
 .modalpop{
     padding:30px;
@@ -215,6 +217,7 @@ font-size:18px;
     margin:auto;
     /*margin-top:150px;*/
     background:lightgray;
+
 }
 .modal_text{
     font-size:21px;

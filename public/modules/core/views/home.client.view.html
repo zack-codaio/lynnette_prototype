@@ -9,18 +9,18 @@
     <div class="blockUI" data-ng-show="level_complete_message">
         <div class="modalpop">
             <div class="level_complete_badge">
-            <img src="/modules/core/img/earth.svg">
+            <img src="/modules/core/img/{{masteredLevel.icon}}.svg">
             </div>
             <h1>Congratulations!</h1>
             <p class="modal_text">
-                You have completed Level 1 and earned the Earth badge!
+                You have completed {{masteredLevel.name}} and earned the {{masteredLevel.leveltype}} badge!
             </p>
             <div class="button" data-ng-click="level_complete_next()">
                 Next
             </div>
         </div>
     </div>
-    <div class="blockUI" data-ng-show="problem_selection_message">
+    <div class="blockUI" data-ng-show="problem_selection_message" ng-controller="UserInfoController">
         <div class="modalpop">
             <h1>Problem Selection Rating</h1>
             <div style="height:50px;">
@@ -37,23 +37,26 @@
                 Can you identify which problems you could have skipped?  Click on the problems that did not have mastery opportunities.
             </p>
             <div class="challenge_column">
-                <p class="level_history">
-                1. Earth<br>
-                2. Fire<br>
-                3. Earth<br>
-                4. Earth<br>
-                5. Water<br>
+                <p data-ng-repeat="item in currentSequence.sequence">
+                    {{$index}}: Level {{item.level}}
                 </p>
+                <!--<p class="level_history">-->
+                <!--1. Earth<br>-->
+                <!--2. Fire<br>-->
+                <!--3. Earth<br>-->
+                <!--4. Earth<br>-->
+                <!--5. Water<br>-->
+                <!--</p>-->
             </div>
-            <div class="challenge_column">
-                <p class="level_history">
-                6. Earth<br>
-                7. Water<br>
-                8. Fire<br>
-                9. Earth<br>
-                10. Earth<br>
-                </p>
-            </div>
+            <!--<div class="challenge_column">-->
+                <!--<p class="level_history">-->
+                <!--6. Earth<br>-->
+                <!--7. Water<br>-->
+                <!--8. Fire<br>-->
+                <!--9. Earth<br>-->
+                <!--10. Earth<br>-->
+                <!--</p>-->
+            <!--</div>-->
             <p class="modal_text greentext">
                 Correct! The two Water problems (5 and 7) did not have additional mastery opportunities.
             </p>
@@ -273,14 +276,15 @@
     </div>
 
     <!--begin sidebar-->
-    <div class="sidebar">
-        <div class="personal" ng-controller="UserInfoController">
+    <div class="sidebar" ng-controller="UserInfoController">
+        <div class="personal" >
             <div class="portrait"></div>
             <div class="personaltext">
                 <h2 class="levelname">{{displayName}}</h2>
                 Selection Level: {{selectionLevel}}
                 <br>
                 Completion Level: {{completionLevel}}</div>
+
         </div>
 
         <div class="playerbadges">
@@ -353,7 +357,7 @@
                     Achieve a streak of 10 unmastered problems.
                 </p>
                 <div style="text-align:center;font-size:36px;">
-                    3 / 10
+                    {{currentStreak}} / 10
                 </div>
             </div>
         </div>

@@ -9,6 +9,8 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
         $scope.displayName = Authentication.user.displayName;
         $scope.selectionLevel = Authentication.user.selectionLevel;
         $scope.completionLevel = Authentication.user.completionLevel;
+        $scope.currentSequence;
+        $scope.currentStreak = 0;
 
         //$scope.displayName = "test name";
 
@@ -45,6 +47,16 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
             selectionEvent.level = data.level;
             selectionEvent.mastered = data.mastered;
             selectionEvent.timestamp = new Date().getTime();
+
+            if(data.mastered == false){
+                $scope.currentStreak++;
+                $rootScope.$broadcast("selectionStreak", {streak: $scope.currentStreak});
+                console.log("currentStreak");
+                console.log($scope.currentStreak);
+            }
+            else{
+                $scope.currentStreak = 0;
+            }
 
             $scope.eventList.push(selectionEvent);
             console.log($scope.eventList);
@@ -87,6 +99,7 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
                 }
 
                 $scope.eventList.push(masteredEvent);
+                $scope.currentSequence = masteredEvent;
                 console.log($scope.eventList);
             }, 500);
         });
