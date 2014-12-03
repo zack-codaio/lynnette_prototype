@@ -106,7 +106,7 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
                             console.log($scope.error);
                         });
                     //trigger level complete popup
-                    $scope.$emit("levelmastered", {levelid: i});
+                    $rootScope.$broadcast("levelmastered", {levelid: i});
                     console.log("levelmastered " + i);
                 }
                 else if(kcmastered == false && levelmastered == true){
