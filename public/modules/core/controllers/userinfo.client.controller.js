@@ -74,7 +74,10 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
             $scope.eventList.push(selectionEvent);
             console.log($scope.eventList);
 
-            if($scope.totalall >= 10 && $scope.percentgood >= 90){
+            //if($scope.totalall >= 10 && $scope.percentgood >= 90){
+            //    $rootScope.$broadcast('aint_scared_complete', {});
+            //}
+            if($scope.totalall >= 5){
                 $rootScope.$broadcast('aint_scared_complete', {});
             }
             if($scope.currentStreak >= 10){

@@ -301,7 +301,7 @@
             <h3 style="margin-top:0">I Ain't Scared.</h3>
 
             <p>
-                Complete 10 problems with at least 90% unmastered problems.
+                Complete 9 unmastered problems. Complete 10 problems total.
             </p>
         </div>
         <div class="challenge_select" ng-click="prospective_challenge(2)" ng-class="{border_select: select2}">
@@ -338,7 +338,8 @@
             <!--{{level.progress}}-->
             <div class="progressbar">
                 <div class="progress" ng-style="{width: {{level.progress}} + '%'}"></div>
-                <p style="" class="progressNumber">{{level.progress}}%</p>
+                <p style="" class="progressNumber" ng-if="level.progress != 100">{{level.progress}}%</p>
+                <p style="" class="progressNumber" ng-if="level.progress == 100">Mastered</p>
             </div>
         </div>
 
@@ -398,12 +399,13 @@
                 <h3 style="margin-top:0" ng-show="aint_scared_complete">I Ain't Scared - Complete!</h3>
 
                 <p>
-                    Complete 10 problems with at least 90% unmastered problems.
+                    Complete 5 unmastered problems.
+                    <!--Complete 10 problems total.-->
                 </p>
 
-                <div style="text-align:left;font-size:28px;">
-                    Problems complete: {{totalall}}<br>
-                    Unmastered: {{percentgood}}%
+                <div style="text-align:left;font-size:24px;">
+                    Unmastered Problems: {{totalall}}<br>
+                    <!--Total problems: {{percentgood}}%-->
                 </div>
             </div>
         </div>
