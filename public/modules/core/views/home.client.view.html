@@ -50,6 +50,7 @@
                     <h4 class="levelname" style="display:inline-block;vertical-align:top;margin-left:10px;">
                         {{selectedLevel.leveltype}}
                     </h4>
+                    <div class="button button-inline button-small" ng-click="problem_complete(0, 0, -1)">Back to Selection</div>
                 </div>
                 <div class="hint" style="" ng-show="hint_visible">
                     <p>
@@ -70,7 +71,7 @@
             <div class="button button-inline" style="background:#056AB4" data-ng-click="hint_click()">
                 Hint
             </div>
-            <div class="button button-inline" data-ng-click="problem_complete(problem.difficulty, levelindex)" style="background:#38B449">
+            <div class="button button-inline" data-ng-click="problem_complete(problem.difficulty, levelindex, 1)" style="background:#38B449">
                 Done
                 <!--{{problem.difficulty}}-->
             </div>
@@ -180,8 +181,8 @@
                 Don't forget to work on mastering new material so I can grow stronger!
             </p>
                 <div class="button button-inline button-discouraged" data-ng-click="bad_selection_next()">Continue with Water</div>
-            <div class="button button-inline" data-ng-click="bad_selection_next()">
-                Continue
+            <div class="button button-inline" data-ng-click="bad_selection_next(1)">
+                Choose New
             </div>
             </div>
         </div>
