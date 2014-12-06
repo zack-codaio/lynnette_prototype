@@ -52,6 +52,11 @@ var LevelSchema = new Schema({
         type: String,
         default: '',
         trim:true
+    },
+    sequence:{
+        type:String,
+        default:'2',
+        trim:true
     }
     //kcomponents
     //mastered

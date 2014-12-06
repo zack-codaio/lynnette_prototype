@@ -4,8 +4,95 @@
 
 
 <div class="maincontain" data-ng-controller="LevelsController" data-ng-init="find()">
+    <!--achievement-->
+    <div class="achievement_popover" ng-controller="AchievementsController" ng-class="{'achievement_show' : make_visible}">
+        <div style="display:inline-block;width:25%;height:100%;vertical-align:top;">
+        <img src="/modules/core/img/achievements/run_dont_walk.svg" class="img_inline">
+        </div>
+        <div style="display:inline-block; width:70%;vertical-align:top;">
+        <p class="achievement_title">
+            Run, Don't Walk
+        </p>
+            <p>
+                Select three unmastered problems in a row.
+            </p>
+        </div>
+    </div>
 
     <!--modal dialogues-->
+    <div class="blockUI" data-ng-show="problem_screen">
+        <div class="modalpop modalpop_large">
+
+            <div class="problem_solving_column" style="display:inline-block;width:70%;vertical-align:top;font-size:24px;line-height:70px;">
+                <div class="problem_row">
+                <h3>Please solve for x.</h3>
+                <div class="problem_input right_align no_input">2x + 3</div> = <div class="problem_input no_input"> 7</div>
+                </div>
+                <div class="problem_row">
+                    <input type="text" class="problem_input right_align"/> = <input type="text" class="problem_input"/>
+                </div>
+                <div class="problem_row">
+                    <input type="text" class="problem_input right_align"/> = <input type="text" class="problem_input"/>
+                </div>
+                <div class="problem_row">
+                    <input type="text" class="problem_input right_align"/> = <input type="text" class="problem_input"/>
+                </div>
+                <div class="problem_row">
+                    <input type="text" class="problem_input right_align"/> = <input type="text" class="problem_input"/>
+                </div>
+
+            </div>
+            <div class="hint_column" style="display:inline-block;width:29%;margin-left:0%;vertical-align:top;">
+                <div class="" style="text-align:center;height:50px;margin-bottom:90px;margin-top:10px;">
+                    <div class="levelbadge" style="height:50px;width:50px;">
+                        <img src="/modules/core/img/{{selectedLevel.icon}}.svg">
+                    </div>
+                    <h4 class="levelname" style="display:inline-block;vertical-align:top;margin-left:10px;">
+                        {{selectedLevel.leveltype}}
+                    </h4>
+                </div>
+                <div class="hint" style="" ng-show="hint_visible">
+                    <p>
+                        You only have a variable term on the left: 2x.
+                    </p>
+                    <p>
+                        Also, you only have a constant on the right: 4.
+                    </p>
+                    <p>
+                        You can get the variable by itself by dividing both sides by the coefficient of the variable.
+                    </p>
+                </div>
+            </div>
+            <div class="button_container" style="margin-top:30px;" >
+            <div class="button button-inline" style="background:#D07728">
+                Undo
+            </div>
+            <div class="button button-inline" style="background:#056AB4" data-ng-click="hint_click()">
+                Hint
+            </div>
+            <div class="button button-inline" data-ng-click="problem_complete(problem.difficulty, levelindex)" style="background:#38B449">
+                Done
+                <!--{{problem.difficulty}}-->
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="blockUI" data-ng-show="trophy_case_show">
+        <div class="modalpop">
+            <div class="level_complete_badge">
+                <img src="/modules/core/img/{{masteredLevel.icon}}.svg">
+            </div>
+            <h1>Trophy Case</h1>
+            <p class="modal_text">
+                You have completed {{masteredLevel.name}} and earned the {{masteredLevel.leveltype}} badge!
+            </p>
+            <div class="button" data-ng-click="trophy_case_click(-1)">
+                Close
+            </div>
+        </div>
+    </div>
+
     <div class="blockUI" data-ng-show="level_complete_message">
         <div class="modalpop">
             <div class="level_complete_badge">
@@ -137,7 +224,8 @@
                 </p>
             </div>
             <div class="challenge_select"  ng-click="prospective_challenge(3)" ng-class="{border_select: select3}">
-                <h3 style="margin-top:0">Hot Streak</h3>
+                <h3 style="margin-top:0" ng-hide="hot_streak_complete">Hot Streak</h3>
+                <h3 style="margin-top:0" ng-show="hot_streak_complete">Hot Streak - Complete!</h3>
                 <p>
                     Achieve a streak of 10 unmastered problems.
                 </p>
@@ -157,16 +245,21 @@
             <div class="levelinfo">
                 <h3 class="levelname">{{level.leveltype}}</h3>
                 <h5 class="levelnumber">{{level.name}}</h5>
-            </div>
-
-            <div class="kcs" ng-repeat="kc in level.kcomponents">
-                <!--<div class="kcs" ng-repeat="kc in level.kcomponents" data-ng-controller="KcomponentsController" data-ng-init="findOneArgs({{kc._id}})">-->
-                <div class="kc_single">
-                {{kc.name}}: {{kc.percentComplete}}%
+                <!--{{level.progress}}-->
+                <div class="progressbar">
+                    <div class="progress" ng-style="{width: {{level.progress}} + '%'}"></div>
+                    <p style="" class="progressNumber">{{level.progress}}%</p>
                 </div>
-                <my-kc info="{{kc._id}} "></my-kc>
-
             </div>
+
+            <!--<div class="kcs" ng-repeat="kc in level.kcomponents">-->
+                <!--<!--<div class="kcs" ng-repeat="kc in level.kcomponents" data-ng-controller="KcomponentsController" data-ng-init="findOneArgs({{kc._id}})">-->-->
+                <!--<div class="kc_single">-->
+                <!--{{kc.name}}: {{kc.percentComplete}}%-->
+                <!--</div>-->
+                <!--<my-kc info="{{kc._id}} "></my-kc>-->
+
+            <!--</div>-->
 
             <div class="examples">
                 <p>
@@ -296,13 +389,14 @@
         <div class="challenge_container" ng-show="daily_challenge_selected == 1">
             <h3 data-ng-click="daily_challenge_click()">Daily Challenge</h3>
             <div class="achievement_goal">
-                <h3 style="margin-top:0">I Ain't Scared</h3>
+                <h3 style="margin-top:0" ng-hide="aint_scared_complete">I Ain't Scared</h3>
+                <h3 style="margin-top:0" ng-show="aint_scared_complete">I Ain't Scared - Complete!</h3>
                 <p>
                 Complete 10 problems with at least 90% unmastered problems.
                 </p>
                 <div style="text-align:left;font-size:28px;">
-                    Problems complete: 6<br>
-                    Unmastered: 88%
+                    Problems complete: {{totalall}}<br>
+                    Unmastered: {{percentgood}}%
                 </div>
             </div>
         </div>
@@ -352,7 +446,8 @@
         <div class="challenge_container"  ng-show="daily_challenge_selected == 3">
             <h3 data-ng-click="daily_challenge_click()">Daily Challenge</h3>
             <div class="achievement_goal">
-                <h3 style="margin-top:0">Hot Streak</h3>
+                <h3 style="margin-top:0" ng-hide="hot_streak_complete">Hot Streak</h3>
+                <h3 style="margin-top:0" ng-show="hot_streak_complete">Hot Streak - Complete!</h3>
                 <p>
                     Achieve a streak of 10 unmastered problems.
                 </p>
@@ -371,7 +466,7 @@
             <div class="achievement_goal">
                 Run, Don't Walk
             </div>
-            <div class="button fullwidth">
+            <div class="button fullwidth" ng-click="trophy_case_click(1)">
                 Trophy Case
             </div>
         </div>

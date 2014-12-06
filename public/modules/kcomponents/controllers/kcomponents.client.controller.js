@@ -52,7 +52,7 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
 		};
 
         // Update existing Kcomponent within scope
-        $scope.updateWithin = function() {
+        $scope.updateWithin = function(howmuch) {
             //var kcomponent = $scope.updateKC ;
             console.log(kcomponent);
             //$scope.findOneArg($scope.updateKC._id);
@@ -60,7 +60,17 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
             var kcomponent = new Kcomponents (
                 $scope.updateKC
             );
-            kcomponent.percentComplete = Math.round(kcomponent.percentComplete + getRandomArbitrary(0, 25));
+            //kcomponent.percentComplete = Math.round(kcomponent.percentComplete + getRandomArbitrary(0, 25));
+            //kcomponent.percentComplete = kcomponent.percentComplete + 10;
+            if(howmuch == 1){
+                kcomponent.percentComplete = kcomponent.percentComplete + 0;
+            }
+            else if(howmuch == 2){
+                kcomponent.percentComplete = kcomponent.percentComplete + 7;
+            }
+            else if(howmuch == 3){
+                kcomponent.percentComplete = kcomponent.percentComplete + 25;
+            }
             function getRandomArbitrary(min, max) {
                 return Math.random() * (max - min) + min;
             }
@@ -108,7 +118,7 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
                 var kcomponent = args.kcs[i];
 
                 $scope.updateKC = kcomponent;
-                $scope.updateWithin();
+                $scope.updateWithin(args.difficulty);
             }
 
                 //$scope.$apply();
@@ -122,9 +132,9 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
             console.log($scope);
             for(var i = 0; i < $scope.kcomponents.length; i++){
                 //set all mastered to false
-                //set all percentCompletes to 25
+                //set all percentCompletes to 0
                 $scope.kcomponents[i].mastered = false;
-                $scope.kcomponents[i].percentComplete = 25;
+                $scope.kcomponents[i].percentComplete = 0;
                 //console.log($scope.kcomponents[i]);
                 $scope.kcomponents[i].$update(function(response) {
                 }, function(errorResponse) {

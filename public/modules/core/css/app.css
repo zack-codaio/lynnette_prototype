@@ -115,6 +115,27 @@ margin-top:30px;
     margin-bottom:10px;
     padding:10px;
 }
+.achievement_popover{
+    width:400px;
+    height:100px;
+    position:fixed;
+    z-index: 1000;
+    left:0;
+    /*margin-left:-200px;*/
+    bottom:-120px;
+    margin-bottom:0;
+    background:white;
+    border-top:10px solid #6dd4ff;
+    transition:bottom .5s;
+}
+.achievement_show{
+    bottom:0px;
+}
+.achievement_title{
+    font-size: 21px;
+    margin-top:10px;
+    font-weight:bold;
+}
 .challenge_select{
     border-radius:8px;
     width:100%;
@@ -185,6 +206,7 @@ font-size:18px;
     vertical-align:top;
     padding-left:10px;
     margin-top:-15px;
+    width:60%;
 }
 .kc_single{
     text-align:left;
@@ -219,6 +241,9 @@ font-size:18px;
     background:lightgray;
 
 }
+.modalpop_large{
+    width:85%;
+}
 .modal_text{
     font-size:21px;
     margin-top:15px;
@@ -252,4 +277,63 @@ font-size:18px;
     border-radius:100px;
     background:white;
     border:1px solid black;
+}
+.progressbar{
+    background: #ababab;
+    border-radius:8px;
+    width:100%;
+    height:30px;
+    overflow:hidden;
+    position:relative;
+    box-sizing:content-box;
+    border:1px solid darkgray;
+}
+.progress{
+    position:absolute;
+    top:0;
+    left:0;
+    width:80px;
+    height:100%;
+    background: #53be4a;
+    border-radius:0;
+}
+.progressNumber{
+    position:absolute;
+    /*left:50%;*/
+    /*margin-left:-15px;*/
+    text-align:center;
+    width:100%;
+    top:0;
+    font-size:20px;
+}
+.problem_row{
+    margin-top:20px;
+    margin-bottom:20px;
+}
+.problem_input{
+    width:40%;
+    background:dimgray;
+    border-radius:8px;
+    border:none;
+    height:70px;
+    color:white;
+    font-size:24px;
+    padding:10px;
+    display:inline-block;
+    line-height:50px;
+    text-align:left;
+}
+.right_align{
+    text-align:right;
+}
+.no_input{
+    color:black;
+    background:none;
+}
+.hint{
+    width:100%;
+    padding:10px;
+    background:#056AB4;
+    color:white;
+    border-radius:8px;
 }

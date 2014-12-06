@@ -10,9 +10,12 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
         $scope.selectionLevel = Authentication.user.selectionLevel;
         $scope.completionLevel = Authentication.user.completionLevel;
         $scope.currentSequence;
-        $scope.currentStreak = 0;
+        $scope.currentStreak = 0; //if this = 10, hot streak challenge is complete
+        $scope.totalgood = 0; //if totalgood / totalall > .9 and totalall >= 10, then "I ain't scared" challenge is complete
+        $scope.totalall = 0;
+        $scope.percentgood = 0;
+        //elemental sampler is triggered off of individual levels selected
 
-        //$scope.displayName = "test name";
 
 
 
@@ -53,15 +56,29 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
                 $rootScope.$broadcast("selectionStreak", {streak: $scope.currentStreak});
                 console.log("currentStreak");
                 console.log($scope.currentStreak);
+                $scope.totalgood++;
             }
             else{
                 $scope.currentStreak = 0;
             }
+            $scope.totalall++;
+            $scope.percentgood = Math.round(($scope.totalgood / ($scope.totalall))*100);
 
             $scope.eventList.push(selectionEvent);
             console.log($scope.eventList);
 
+            if($scope.totalall >= 10 && $scope.percentgood >= 90){
+                $rootScope.$broadcast('aint_scared_complete', {});
+            }
+            if($scope.currentStreak >= 10){
+                $rootScope.$broadcast('hot_streak_complete', {});
+            }
+
             //save back to DB?
+        });
+
+        $scope.$on('levelcomplete', function(event, data){
+
         });
 
         $scope.$on('levelmastered', function(event, data){

@@ -1,8 +1,8 @@
 'use strict';
 
 // Achievements controller
-angular.module('achievements').controller('AchievementsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Achievements',
-	function($scope, $stateParams, $location, Authentication, Achievements ) {
+angular.module('achievements').controller('AchievementsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Achievements', '$rootScope',
+	function($scope, $stateParams, $location, Authentication, Achievements, $rootScope ) {
 		$scope.authentication = Authentication;
 
 		// Create new Achievement
@@ -62,5 +62,23 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
 				achievementId: $stateParams.achievementId
 			});
 		};
+
+        var achievements = new Object();
+        achievements.a1 = false;
+        achievements.a2 = false;
+        achievements.a3 = false;
+        achievements.a4 = false;
+
+        $scope.make_visible = false;
+        $scope.$on("selectionStreak", function(event, data){
+           if(data.streak == 3 && $scope.make_visible == false && achievements.a1 == false){
+               $scope.make_visible = true;
+               achievements.a1 = true;
+               setTimeout(function(){
+                   $scope.make_visible = false;
+                   $scope.$digest();
+               }, 3500);
+           }
+        });
 	}
 ]);

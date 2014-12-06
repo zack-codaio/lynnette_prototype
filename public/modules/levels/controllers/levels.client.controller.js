@@ -6,6 +6,7 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         $scope.authentication = Authentication;
 
         $scope.masteredLevel;
+        $scope.difficulty_sequence = "332211";
 
         // Create new Level
         $scope.create = function () {
@@ -84,9 +85,13 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
 
                 //check kc mastered for each kc
                 var kcmastered = true;
+                $scope.levels[i].progress = 100;
                 for(var j = 0; j < $scope.levels[i].kcomponents.length; j++){
                     if($scope.levels[i].kcomponents[j].mastered == false){
                         kcmastered = false;
+                    }
+                    if($scope.levels[i].progress > $scope.levels[i].kcomponents[j].percentComplete){
+                        $scope.levels[i].progress = $scope.levels[i].kcomponents[j].percentComplete;
                     }
                 }
                 //if all kc's mastered and level mastered is false
@@ -153,10 +158,16 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             }, function(){
                 $scope.level.kcomponentList = "";
                 console.log($scope.level);
+                $scope.level.progress = 100;
                 for(var i = 0; i < $scope.level.kcomponents.length; i++){
                     $scope.level.kcomponentList = $scope.level.kcomponentList + $scope.level.kcomponents[i] + " ";
+                    if($scope.level.progress > $scope.level.kcomponents[i].percentComplete){
+                        $scope.level.progress = $scope.level.kcomponents[i].percentComplete;
+                    }
+
                 }
                 $scope.level.kcomponentList = $scope.level.kcomponentList.substr(0, $scope.level.kcomponentList.length-1);
+
             });
         };
 
@@ -165,13 +176,7 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             console.log("level completed");
             $scope.level_complete_message = true;
         }
-        //$scope.$on('levelmastered', function(event, data){
-        //    var levelid = args.levelid;
-        //    console.log("level "+levelid+" completed");
-        //
-        //    $scope.$apply();
-        //
-        //});
+
         $scope.level_complete_next = function () {
             console.log("level complete next");
             $scope.level_complete_message = false;
@@ -251,11 +256,6 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             $scope.daily_challenge_selected = $scope.daily_challenge_new;
         }
 
-        $scope.air_click = function () {
-            console.log($scope);
-            $rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[4].kcomponents});
-        }
-
         $scope.$on('KCupdated', function(){
             console.log("received KCupdated");
 
@@ -280,7 +280,7 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
                 $rootScope.$broadcast('levelselect', {level: levelindex, mastered: true});
             }
             else if(mastered == false){
-                $rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents});
+                //$rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents});
                 $rootScope.$broadcast('levelselect', {level: levelindex, mastered: false});
             }
         }
@@ -294,6 +294,71 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             $scope.masteredLevel = $scope.levels[data.levelid];
             console.log($scope.masteredLevel);
         });
+
+        $scope.problem_screen = false;
+        $scope.hint_visible = false;
+        $scope.problem = new Object();
+        $scope.$on('levelselect', function(data, args){
+            $scope.selectedLevel = $scope.levels[args.level];
+            $scope.problem_screen = true;
+
+            var sequence = $scope.levels[args.level].sequence.toString();
+            console.log(sequence);
+
+            var difficulty = parseInt(sequence.slice(0,1));
+            $scope.levels[args.level].sequence = $scope.levels[args.level].sequence.slice(1) + difficulty;
+            console.log($scope.levels[args.level]);
+            //depopulate_level($scope.levels[args.level]).$update();
+            //console.log($scope.levels[args.level].sequence);
+
+
+            var difficulty = parseInt($scope.difficulty_sequence.slice(0,1));
+            $scope.difficulty_sequence = $scope.difficulty_sequence.slice(1) + difficulty;
+            if(difficulty > 3 || difficulty < 1){
+                difficulty = 2;
+            }
+            console.log("difficulty = "+difficulty);
+
+
+            $scope.problem.difficulty = difficulty;
+            $scope.levelindex = args.level;
+            $scope.hint_visible = false;
+        });
+
+        $scope.problem_complete = function(difficulty, levelindex){
+            console.log('problem complete');
+            $scope.problem_screen = false;
+            $rootScope.$broadcast('levelcomplete', {difficulty : difficulty, level: levelindex});
+            console.log('levelindex: '+levelindex);
+            console.log('$scope.levels: ');
+            console.log($scope.levels);
+            $rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents, difficulty: difficulty});
+        }
+        $scope.hint_click = function(){
+            $scope.hint_visible = true;
+        }
+
+        $scope.aint_scared_complete = false;
+        $scope.$on('aint_scared_complete', function(event, data){
+            console.log("received aint scared complete");
+            $scope.aint_scared_complete = true;
+        });
+
+        $scope.hot_streak_complete = false;
+        $scope.$on('hot_streak_complete', function(event, data){
+            console.log("received hot streak complete");
+            $scope.hot_streak_complete = true;
+        });
+
+        $scope.trophy_case_show = false;
+        $scope.trophy_case_click = function(a){
+            if(a == 1){
+                $scope.trophy_case_show = true;
+            }
+            else{
+                $scope.trophy_case_show = false;
+            }
+        }
     }
 ]).directive('myKc', function(){
     console.log();
