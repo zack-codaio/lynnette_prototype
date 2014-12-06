@@ -6,18 +6,20 @@
 <!--achievement-->
 <div class="achievement_popover" ng-controller="AchievementsController" ng-class="{'achievement_show' : make_visible}">
     <div style="display:inline-block;width:25%;height:100%;vertical-align:top;">
-        <img src="/modules/core/img/achievements/run_dont_walk.svg" class="img_inline">
+        <img src="/modules/core/img/achievements/{{achievement.icon}}.svg" class="img_inline">
     </div>
     <div style="display:inline-block; width:70%;vertical-align:top;">
         <p class="achievement_title">
-            Run, Don't Walk
+            {{achievement.title}}
         </p>
 
         <p>
-            Select three unmastered problems in a row.
+
+            {{achievement.description}}
         </p>
     </div>
 </div>
+
 
 <!--modal dialogues-->
 <div class="blockUI" data-ng-show="problem_screen">
@@ -471,7 +473,7 @@
         <div id="achievements_container">
             <!--ng-controller="AchievementsController"-->
 
-            <h3>Recent Achievement:</h3>
+            <h3>Latest Achievement:</h3>
 
             <div class="achievement_goal" ng-controller="AchievementsController"
                 ng-if="achievement_earned == 1" >
@@ -485,6 +487,21 @@
 
                     <p>
                         Select three unmastered problems in a row.
+                    </p>
+                </div>
+            </div>
+            <div class="achievement_goal" ng-controller="AchievementsController"
+                 ng-if="achievement_earned == 2" >
+                <div style="display:inline-block;width:25%;height:100%;vertical-align:top;">
+                    <img src="/modules/core/img/achievements/mountain_climber.svg" class="img_inline">
+                </div>
+                <div style="display:inline-block; width:70%;vertical-align:top;">
+                    <p class="achievement_title">
+                        Mountain Climber
+                    </p>
+
+                    <p>
+                        Complete 10 unmastered problems.
                     </p>
                 </div>
             </div>

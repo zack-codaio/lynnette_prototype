@@ -67,10 +67,10 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
                 kcomponent.percentComplete = kcomponent.percentComplete + 0;
             }
             else if (howmuch == 2) {
-                kcomponent.percentComplete = kcomponent.percentComplete + 10;
+                kcomponent.percentComplete = kcomponent.percentComplete + 7;
             }
             else if (howmuch == 3) {
-                kcomponent.percentComplete = kcomponent.percentComplete + 20;
+                kcomponent.percentComplete = kcomponent.percentComplete + 24;
             }
             function getRandomArbitrary(min, max) {
                 return Math.random() * (max - min) + min;

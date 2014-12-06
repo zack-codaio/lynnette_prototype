@@ -15,6 +15,8 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
         $scope.totalall = 0;
         $scope.percentgood = 0;
         $scope.stars_earned = 0;
+
+        $scope.session_total_unmastered = 0;
         //elemental sampler is triggered off of individual levels selected
 
         $scope.achievement_earned = 0;
@@ -60,6 +62,8 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
                 console.log("currentStreak");
                 console.log($scope.currentStreak);
                 $scope.totalgood++;
+                $scope.session_total_unmastered++;
+                $rootScope.$broadcast("total_unmastered", {number: $scope.session_total_unmastered});
             }
             else{
                 $scope.currentStreak = 0;

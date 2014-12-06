@@ -69,11 +69,20 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
         achievements.a3 = false;
         achievements.a4 = false;
 
+        $scope.achievement = new Object();
+        $scope.achievement.title = "Run, Don't Walk";
+        $scope.achievement.description = "Select three unmastered problems in a row.";
+        $scope.achievement.icon = "run_dont_walk";
+
         $scope.make_visible = false;
         $scope.$on("selectionStreak", function(event, data){
            if(data.streak == 3 && $scope.make_visible == false && achievements.a1 == false){
                $scope.make_visible = true;
                achievements.a1 = true;
+
+               $scope.achievement.title = "Run, Don't Walk";
+               $scope.achievement.description = "Select three unmastered problems in a row.";
+               $scope.achievement.icon = "run_dont_walk";
 
                $rootScope.$broadcast('achievement_earned', {achievement_id: 1});
 
@@ -82,6 +91,23 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
                    $scope.$digest();
                }, 3500);
            }
+        });
+        $scope.$on("total_unmastered", function(event, data){
+            if(data.number == 10 && $scope.make_visible == false && achievements.a2 == false){
+                $scope.make_visible = true;
+                achievements.a2 = true;
+
+                $scope.achievement.title = "Mountain Climber";
+                $scope.achievement.description = "Complete 10 unmastered problems.";
+                $scope.achievement.icon = "mountain_climber";
+
+                $rootScope.$broadcast('achievement_earned', {achievement_id: 2});
+
+                setTimeout(function(){
+                    $scope.make_visible = false;
+                    $scope.$digest();
+                }, 3500);
+            }
         });
 	}
 ]);
