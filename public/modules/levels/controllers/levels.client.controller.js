@@ -6,7 +6,7 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         $scope.authentication = Authentication;
 
         $scope.masteredLevel;
-        $scope.difficulty_sequence = "332211";
+        $scope.difficulty_sequence = "32122232";
 
         // Create new Level
         $scope.create = function () {

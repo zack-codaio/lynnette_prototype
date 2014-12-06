@@ -185,8 +185,12 @@
         </p>
 
         <p class="modal_text" ng-if="missed_opportunities">
+            You don't learn new things in problems you have already mastered!<br>
             Can you identify which problems you could have skipped?
             <!--Click on the problems that did not have mastery opportunities.-->
+        </p>
+        <p class="modal_text" ng-if="missed_opportunities == 0">
+            Great job! You chose only problems you haven't already mastered.
         </p>
 
         <div class="challenge_column">
@@ -357,7 +361,12 @@
 <!--begin sidebar-->
 <div class="sidebar" ng-controller="UserInfoController">
     <div class="personal">
-        <div class="portrait"></div>
+        <div class="portrait" style="overflow:hidden;">
+            <img src="/modules/core/img/avatars/robot1.png" style="margin-left:10px;" ng-if="stars_earned < 8">
+            <img src="/modules/core/img/avatars/robot2.png" style="margin-left:10px;" ng-if="stars_earned >= 8 && stars_earned < 16">
+            <img src="/modules/core/img/avatars/robot3.png" style="margin-left:17px;" ng-if="stars_earned >= 16">
+        </div>
+
         <div class="personaltext">
             <h2 class="levelname">{{displayName}}</h2>
 
@@ -465,7 +474,7 @@
             <h3>Recent Achievement:</h3>
 
             <div class="achievement_goal" ng-controller="AchievementsController"
-                 ng-class="{'achievement_show' : make_visible}">
+                ng-if="achievement_earned == 1" >
                 <div style="display:inline-block;width:25%;height:100%;vertical-align:top;">
                     <img src="/modules/core/img/achievements/run_dont_walk.svg" class="img_inline">
                 </div>
@@ -479,13 +488,16 @@
                     </p>
                 </div>
             </div>
+            <div class="" ng-if="achievement_earned == 0">
+                Looks like you haven't earned any achievements yet. Why don't you get started on some problems?
+                </div>
             <!--<div class="achievement_goal">-->
             <!--Problem Selection Master-->
             <!--</div>-->
             <!--<div class="achievement_goal">-->
             <!--Run, Don't Walk-->
             <!--</div>-->
-            <div class="button fullwidth" ng-click="trophy_case_click(1)">
+            <div class="button fullwidth" ng-click="trophy_case_click(1)" style="margin-top:20px;">
                 Trophy Case
             </div>
         </div>

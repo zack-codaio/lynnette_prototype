@@ -74,6 +74,9 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
            if(data.streak == 3 && $scope.make_visible == false && achievements.a1 == false){
                $scope.make_visible = true;
                achievements.a1 = true;
+
+               $rootScope.$broadcast('achievement_earned', {achievement_id: 1});
+
                setTimeout(function(){
                    $scope.make_visible = false;
                    $scope.$digest();

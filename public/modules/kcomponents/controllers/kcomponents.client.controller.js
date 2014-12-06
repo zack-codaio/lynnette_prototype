@@ -67,10 +67,10 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
                 kcomponent.percentComplete = kcomponent.percentComplete + 0;
             }
             else if (howmuch == 2) {
-                kcomponent.percentComplete = kcomponent.percentComplete + 7;
+                kcomponent.percentComplete = kcomponent.percentComplete + 10;
             }
             else if (howmuch == 3) {
-                kcomponent.percentComplete = kcomponent.percentComplete + 25;
+                kcomponent.percentComplete = kcomponent.percentComplete + 20;
             }
             function getRandomArbitrary(min, max) {
                 return Math.random() * (max - min) + min;
@@ -173,6 +173,7 @@ angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$s
                     $scope.kcomponents[i].mastered = true;
                 }
                 $scope.kcomponents[i].$update(function (response) {
+                    $location.path('/');
                 }, function (errorResponse) {
                     $scope.error = errorResponse.data.message;
                 });

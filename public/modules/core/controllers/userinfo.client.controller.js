@@ -17,6 +17,8 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
         $scope.stars_earned = 0;
         //elemental sampler is triggered off of individual levels selected
 
+        $scope.achievement_earned = 0;
+
 
 
 
@@ -144,6 +146,13 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
             console.log('received stars_added');
             $scope.stars_earned = $scope.stars_earned + data.stars;
             $scope.$digest();
+        })
+
+        $scope.$on('achievement_earned', function(event, data){
+            $scope.achievement_earned = data.achievement_id;
+            console.log(data);
+            console.log($scope.achievement_earned);
+            //$scope.$digest();
         })
     }
 ])
