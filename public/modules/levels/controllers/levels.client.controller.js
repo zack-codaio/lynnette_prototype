@@ -332,15 +332,17 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         $scope.problem_complete = function (difficulty, levelindex, status) {
             if (status == 1) { //proper return
                 console.log('problem complete');
+                console.log(difficulty +" "+levelindex+" "+status);
                 $scope.problem_screen = false;
                 $rootScope.$broadcast('levelcomplete', {difficulty: difficulty, level: levelindex});
-                console.log('levelindex: ' + levelindex);
                 console.log('$scope.levels: ');
                 console.log($scope.levels);
+
                 $rootScope.$broadcast('KCbroadcast', {
                     kcs: $scope.levels[levelindex].kcomponents,
                     difficulty: difficulty
                 });
+                console.log("broadcasted KCbroadcast");
             }
             else if (status == -1) { //back to selection
                 console.log('problem complete received '+ status+' , back to selection');

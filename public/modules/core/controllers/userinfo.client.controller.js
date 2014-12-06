@@ -14,6 +14,7 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
         $scope.totalgood = 0; //if totalgood / totalall > .9 and totalall >= 10, then "I ain't scared" challenge is complete
         $scope.totalall = 0;
         $scope.percentgood = 0;
+        $scope.stars_earned = 0;
         //elemental sampler is triggered off of individual levels selected
 
 
@@ -115,10 +116,39 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
                     }
                 }
 
+                //this will incorrectly log ones where the feedback message pops up and the user goes back to selection
+
                 $scope.eventList.push(masteredEvent);
                 $scope.currentSequence = masteredEvent;
+                //how many total
+                //how many good
+                console.log("current sequence");
+                console.log($scope.currentSequence);
+                $scope.total_sequence = $scope.currentSequence.sequence.length;
+                $scope.missed_opportunities = 0;
+                for(var i = 0; i < $scope.currentSequence.sequence.length; i++){
+                    if($scope.currentSequence.sequence[i].mastered == true){
+                        $scope.missed_opportunities++;
+                    }
+                }
+                $scope.stars = Math.round((100 - 100*($scope.missed_opportunities/$scope.total_sequence))/20);
+                console.log("stars = "+$scope.stars);
+
+                $scope.$broadcast('stars_added', {stars: $scope.stars});
+
                 console.log($scope.eventList);
             }, 500);
         });
+
+        $scope.$on('stars_added', function(event, data){
+            console.log('received stars_added');
+            $scope.stars_earned = $scope.stars_earned + data.stars;
+            $scope.$digest();
+        })
     }
-]);
+])
+    .directive('problemHistory', function(){
+        return {
+            templateUrl: 'problemHistory.html'
+        }
+    });

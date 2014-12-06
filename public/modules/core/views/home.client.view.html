@@ -42,6 +42,7 @@
                 </div>
 
             </div>
+            <span data-ng-controller="KcomponentsController" ng-init="find()"></span>
             <div class="hint_column" style="display:inline-block;width:29%;margin-left:0%;vertical-align:top;">
                 <div class="" style="text-align:center;height:50px;margin-bottom:90px;margin-top:10px;">
                     <div class="levelbadge" style="height:50px;width:50px;">
@@ -112,21 +113,28 @@
         <div class="modalpop">
             <h1>Problem Selection Recap</h1>
             <div style="height:50px;">
-                <img src="/modules/core/img/star.svg" class="star">
-                <img src="/modules/core/img/star.svg" class="star">
-                <img src="/modules/core/img/star.svg" class="star">
-                <img src="/modules/core/img/star.svg" class="star">
-                <img src="/modules/core/img/star.svg" class="star">
+                <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 1">
+                <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 2">
+                <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 3">
+                <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 4">
+                <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 5">
+                <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 5">
+                <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 4">
+                <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 3">
+                <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 2">
+                <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 1">
+
             </div>
             <p class="modal_text">
-                You solved 10 problems, two of which did not help you toward mastery.
+                You solved {{total_sequence}} problems, {{missed_opportunities}} of which did not help you toward mastery.
             </p>
-            <p class="modal_text">
-                Can you identify which problems you could have skipped?  Click on the problems that did not have mastery opportunities.
+            <p class="modal_text" ng-if="missed_opportunities">
+                Can you identify which problems you could have skipped?
+                <!--Click on the problems that did not have mastery opportunities.-->
             </p>
             <div class="challenge_column">
                 <p data-ng-repeat="item in currentSequence.sequence">
-                    {{$index}}: Level {{item.level}}
+                    {{$index + 1}}: Level {{item.level + 1}}
                 </p>
                 <!--<p class="level_history">-->
                 <!--1. Earth<br>-->
@@ -146,7 +154,7 @@
                 <!--</p>-->
             <!--</div>-->
             <p class="modal_text greentext">
-                Correct! The two Water problems (5 and 7) did not have additional mastery opportunities.
+                <!--Correct! The two Water problems (5 and 7) did not have additional mastery opportunities.-->
             </p>
             <div class="button" data-ng-click="problem_selection_next()">
                 Continue
@@ -254,7 +262,7 @@
             </div>
 
             <!--<div class="kcs" ng-repeat="kc in level.kcomponents">-->
-                <!--<!--<div class="kcs" ng-repeat="kc in level.kcomponents" data-ng-controller="KcomponentsController" data-ng-init="findOneArgs({{kc._id}})">-->-->
+                <!--<!--<div class="kcs" ng-repeat="kc in level.kcomponents" data-ng-controller="KcomponentsController" data-ng-init="findOneArgs({{kc._id}})">-->
                 <!--<div class="kc_single">-->
                 <!--{{kc.name}}: {{kc.percentComplete}}%-->
                 <!--</div>-->
@@ -268,104 +276,6 @@
                     {{level.example2}}
                 </p>
             </div>
-
-        </div>
-
-
-
-        <div class="level" data-ng-click="bad_selection_click()">
-            <div class="levelbadge">
-                <img src="/modules/core/img/water.svg">
-            </div>
-            <div class="levelinfo">
-                <h3 class="levelname">Water</h3>
-                <h5 class="levelnumber">Level 1</h5>
-            </div>
-
-            <div class="examples">
-                <p>
-                    x + 3 = 8<br>
-                    x - 4 = 6
-                </p>
-            </div>
-
-        </div>
-        <div class="level" ng-click="complete_level()">
-            <div class="levelbadge">
-                <img src="/modules/core/img/earth.svg">
-            </div>
-            <div class="levelinfo">
-                <h3 class="levelname">Earth</h3>
-                <h5 class="levelnumber">Level 2</h5>
-            </div>
-            <div class="examples">
-                <p>
-                    -3x + 3 = 8<br>
-                    5x - 4 = 6
-                </p>
-            </div>
-        </div>
-        <div class="level" ng-click="positive_feedback_click()">
-            <div class="levelbadge">
-                <img src="/modules/core/img/metal.svg">
-            </div>
-            <div class="levelinfo">
-                <h3 class="levelname">Metal</h3>
-                <h5 class="levelnumber">Level 3</h5>
-            </div>
-            <div class="examples">
-                <p>
-                    -3(x + 3) = 8<br>
-                    5(x - 4) = 6 / 4
-                </p>
-            </div>
-        </div>
-        <div class="level">
-            <div class="levelbadge">
-                <img src="/modules/core/img/fire.svg">
-            </div>
-            <div class="levelinfo">
-                <h3 class="levelname">Fire</h3>
-                <h5 class="levelnumber">Level 4</h5>
-            </div>
-            <div class="examples">
-                <p>
-                    5(x - 2) = 8(3 - x)<br>
-                    3(x - 4) = 6(x + 1)
-                </p>
-            </div>
-        </div>
-        <div class="level" data-ng-click="air_click()">
-            <div class="levelbadge">
-                <img src="/modules/core/img/air.svg">
-            </div>
-            <div class="levelinfo">
-                <h3 class="levelname">Air</h3>
-                <h5 class="levelnumber">Level 5</h5>
-            </div>
-            <div class="kcs" ng-repeat="kc in level.kcomponents">
-                asdf
-            </div>
-            <div class="examples" data-ng-controller="KcomponentsController">
-                <p>
-                    -5(x - 3) / 4 = 3(2 - 5x)<br>
-                    3x - 4x = 6(3x - 10x)
-                </p>
-            </div>
-        </div>
-        <div class="level">
-            <div class="levelbadge">
-                <img src="/modules/core/img/time.svg">
-            </div>
-            <div class="levelinfo">
-                <h3 class="levelname">Time</h3>
-                <h5 class="levelnumber">Final Level</h5>
-            </div>
-            <div class="examples">
-                <p>
-                    ???
-                </p>
-            </div>
         </div>
     </div>
 
@@ -375,9 +285,11 @@
             <div class="portrait"></div>
             <div class="personaltext">
                 <h2 class="levelname">{{displayName}}</h2>
-                Selection Level: {{selectionLevel}}
-                <br>
-                Completion Level: {{completionLevel}}</div>
+                <div style="font-size:26px;line-height:50px;display:inline-block;vertical-align:middle;text-align:center;">{{stars_earned}} <img src="/modules/core/img/star.svg" class="star" style="vertical-align:middle;margin-top:-10px;"></div>
+                <!--Selection Level: {{selectionLevel}}-->
+                <!--<br>-->
+                <!--Completion Level: {{completionLevel}}</div>-->
+            <!--<img src="/modules/core/img/star.svg" class="star"> {{stars_earned}}-->
 
         </div>
 
@@ -460,13 +372,27 @@
         <div id="achievements_container">
             <!--ng-controller="AchievementsController"-->
 
-            <h3>Recent Achievements</h3>
-            <div class="achievement_goal">
-                Problem Selection Master
+            <h3>Recent Achievement:</h3>
+
+            <div class="achievement_goal" ng-controller="AchievementsController" ng-class="{'achievement_show' : make_visible}">
+                <div style="display:inline-block;width:25%;height:100%;vertical-align:top;">
+                    <img src="/modules/core/img/achievements/run_dont_walk.svg" class="img_inline">
+                </div>
+                <div style="display:inline-block; width:70%;vertical-align:top;">
+                    <p class="achievement_title">
+                        Run, Don't Walk
+                    </p>
+                    <p>
+                        Select three unmastered problems in a row.
+                    </p>
+                </div>
             </div>
-            <div class="achievement_goal">
-                Run, Don't Walk
-            </div>
+            <!--<div class="achievement_goal">-->
+                <!--Problem Selection Master-->
+            <!--</div>-->
+            <!--<div class="achievement_goal">-->
+                <!--Run, Don't Walk-->
+            <!--</div>-->
             <div class="button fullwidth" ng-click="trophy_case_click(1)">
                 Trophy Case
             </div>
