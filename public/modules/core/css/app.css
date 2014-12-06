@@ -97,6 +97,7 @@ img{
 .challenge_column{
     display:inline-block;
     margin:auto;
+    font-size:24px;
 }
 
 .challenge_container{
@@ -120,16 +121,17 @@ margin-top:30px;
     height:100px;
     position:fixed;
     z-index: 1000;
-    left:0;
-    /*margin-left:-200px;*/
-    bottom:-120px;
+    left:50%;
+    margin-left:-200px;
+    /*bottom:-120px;*/
+    top:-120px;
     margin-bottom:0;
     background:white;
-    border-top:10px solid #6dd4ff;
-    transition:bottom .5s;
+    border-bottom:10px solid #6dd4ff;
+    transition:top .5s;
 }
 .achievement_show{
-    bottom:0px;
+    top:60px;
 }
 .achievement_title{
     font-size: 21px;
