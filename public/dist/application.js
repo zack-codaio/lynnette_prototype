@@ -43,6 +43,10 @@ angular.element(document).ready(function() {
 });
 'use strict';
 
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('achievements');
+'use strict';
+
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('articles');
 'use strict';
@@ -51,8 +55,185 @@ ApplicationConfiguration.registerModule('articles');
 ApplicationConfiguration.registerModule('core');
 'use strict';
 
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('kcomponents');
+'use strict';
+
+// Use applicaion configuration module to register a new module
+ApplicationConfiguration.registerModule('levels');
+'use strict';
+
 // Use Applicaion configuration module to register a new module
 ApplicationConfiguration.registerModule('users');
+'use strict';
+
+// Configuring the Articles module
+angular.module('achievements').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Achievements', 'achievements', 'dropdown', '/achievements(/create)?');
+		Menus.addSubMenuItem('topbar', 'achievements', 'List Achievements', 'achievements');
+		Menus.addSubMenuItem('topbar', 'achievements', 'New Achievement', 'achievements/create');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('achievements').config(['$stateProvider',
+	function($stateProvider) {
+		// Achievements state routing
+		$stateProvider.
+		state('listAchievements', {
+			url: '/achievements',
+			templateUrl: 'modules/achievements/views/list-achievements.client.view.html'
+		}).
+		state('createAchievement', {
+			url: '/achievements/create',
+			templateUrl: 'modules/achievements/views/create-achievement.client.view.html'
+		}).
+		state('viewAchievement', {
+			url: '/achievements/:achievementId',
+			templateUrl: 'modules/achievements/views/view-achievement.client.view.html'
+		}).
+		state('editAchievement', {
+			url: '/achievements/:achievementId/edit',
+			templateUrl: 'modules/achievements/views/edit-achievement.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Achievements controller
+angular.module('achievements').controller('AchievementsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Achievements', '$rootScope',
+	function($scope, $stateParams, $location, Authentication, Achievements, $rootScope ) {
+		$scope.authentication = Authentication;
+
+		// Create new Achievement
+		$scope.create = function() {
+			// Create new Achievement object
+			var achievement = new Achievements ({
+				name: this.name,
+                description: this.description
+			});
+
+			// Redirect after save
+			achievement.$save(function(response) {
+				$location.path('achievements/' + response._id);
+
+				// Clear form fields
+				$scope.name = '';
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Remove existing Achievement
+		$scope.remove = function( achievement ) {
+			if ( achievement ) { achievement.$remove();
+
+				for (var i in $scope.achievements ) {
+					if ($scope.achievements [i] === achievement ) {
+						$scope.achievements.splice(i, 1);
+					}
+				}
+			} else {
+				$scope.achievement.$remove(function() {
+					$location.path('achievements');
+				});
+			}
+		};
+
+		// Update existing Achievement
+		$scope.update = function() {
+			var achievement = $scope.achievement ;
+
+			achievement.$update(function() {
+				$location.path('achievements/' + achievement._id);
+			}, function(errorResponse) {
+				$scope.error = errorResponse.data.message;
+			});
+		};
+
+		// Find a list of Achievements
+		$scope.find = function() {
+			$scope.achievements = Achievements.query();
+		};
+
+		// Find existing Achievement
+		$scope.findOne = function() {
+			$scope.achievement = Achievements.get({ 
+				achievementId: $stateParams.achievementId
+			});
+		};
+
+        var achievements = new Object();
+        achievements.a1 = false;
+        achievements.a2 = false;
+        achievements.a3 = false;
+        achievements.a4 = false;
+
+		var audio = new Audio('/modules/achievements/img/bell.wav');
+
+        $scope.achievement = new Object();
+        $scope.achievement.title = "Run, Don't Walk";
+        $scope.achievement.description = "Select three unmastered problems in a row.";
+        $scope.achievement.icon = "run_dont_walk";
+
+        $scope.make_visible = false;
+        $scope.$on("selectionStreak", function(event, data){
+           if(data.streak == 3 && $scope.make_visible == false && achievements.a1 == false){
+
+
+			   audio.play();
+
+               $scope.make_visible = true;
+               achievements.a1 = true;
+
+               $scope.achievement.title = "Run, Don't Walk";
+               $scope.achievement.description = "Select three unmastered problems in a row.";
+               $scope.achievement.icon = "run_dont_walk";
+
+               $rootScope.$broadcast('achievement_earned', {achievement_id: 1});
+
+               setTimeout(function(){
+                   $scope.make_visible = false;
+                   $scope.$digest();
+               }, 5500);
+           }
+        });
+        $scope.$on("total_unmastered", function(event, data){
+            if(data.number == 10 && $scope.make_visible == false && achievements.a2 == false){
+				audio.play();
+                $scope.make_visible = true;
+                achievements.a2 = true;
+
+                $scope.achievement.title = "Mountain Climber";
+                $scope.achievement.description = "Complete 10 unmastered problems.";
+                $scope.achievement.icon = "mountain_climber";
+
+                $rootScope.$broadcast('achievement_earned', {achievement_id: 2});
+
+                setTimeout(function(){
+                    $scope.make_visible = false;
+                    $scope.$digest();
+                }, 5500);
+            }
+        });
+	}
+]);
+'use strict';
+
+//Achievements service used to communicate Achievements REST endpoints
+angular.module('achievements').factory('Achievements', ['$resource',
+	function($resource) {
+		return $resource('achievements/:achievementId', { achievementId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
 'use strict';
 
 // Configuring the Articles module
@@ -189,10 +370,12 @@ angular.module('core').controller('HeaderController', ['$scope', 'Authentication
 			$scope.isCollapsed = !$scope.isCollapsed;
 		};
 
+
 		// Collapsing the menu after navigation
 		$scope.$on('$stateChangeSuccess', function() {
 			$scope.isCollapsed = false;
 		});
+        try{Typekit.load();}catch(e){}
 	}
 ]);
 'use strict';
@@ -204,6 +387,176 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 		$scope.authentication = Authentication;
 	}
 ]);
+'use strict';
+
+angular.module('core').controller('UserInfoController', ['$scope', 'Authentication', 'Menus', '$rootScope',
+    function($scope, Authentication, Menus, $rootScope) {
+        $scope.authentication = Authentication;
+
+        console.log(Authentication);
+
+        $scope.displayName = Authentication.user.displayName;
+        $scope.selectionLevel = Authentication.user.selectionLevel;
+        $scope.completionLevel = Authentication.user.completionLevel;
+        $scope.currentSequence;
+        $scope.currentStreak = 0; //if this = 10, hot streak challenge is complete
+        $scope.totalgood = 0; //if totalgood / totalall > .9 and totalall >= 10, then "I ain't scared" challenge is complete
+        $scope.totalall = 0;
+        $scope.percentgood = 0;
+        $scope.stars_earned = 0;
+
+        $scope.session_total_unmastered = 0;
+        //elemental sampler is triggered off of individual levels selected
+
+        $scope.achievement_earned = 0;
+
+
+
+
+        //keep a list of events
+        $scope.eventList = new Array();
+        //selection event
+        //  eventType = "selection"
+        //  level
+        //  mastered
+        //  % completed?
+        //  time
+        //level completion event
+        //  eventType = "levelcomplete"
+        //  level
+        //  time
+        //achievement event?
+
+
+        $scope.$on('levelselect', function(event, data){
+            console.log('UserInfoController received levelselect');
+            //console.log(data.level);
+            //console.log(data.mastered);
+
+            var selectionEvent = new Object();
+            //selection event
+            //  eventType = "selection"
+            //  level
+            //  mastered
+            //  % completed?
+            //  time
+            selectionEvent.eventType = "selection";
+            selectionEvent.level = data.level;
+            selectionEvent.mastered = data.mastered;
+            selectionEvent.timestamp = new Date().getTime();
+
+            if(data.mastered == false){
+                $scope.currentStreak++;
+                $rootScope.$broadcast("selectionStreak", {streak: $scope.currentStreak});
+                console.log("currentStreak");
+                console.log($scope.currentStreak);
+                $scope.totalgood++;
+                $scope.session_total_unmastered++;
+                $rootScope.$broadcast("total_unmastered", {number: $scope.session_total_unmastered});
+            }
+            else{
+                $scope.currentStreak = 0;
+            }
+            $scope.totalall++;
+            $scope.percentgood = Math.round(($scope.totalgood / ($scope.totalall))*100);
+
+            $scope.eventList.push(selectionEvent);
+            console.log($scope.eventList);
+
+            //if($scope.totalall >= 10 && $scope.percentgood >= 90){
+            //    $rootScope.$broadcast('aint_scared_complete', {});
+            //}
+            if($scope.totalall >= 5){
+                $rootScope.$broadcast('aint_scared_complete', {});
+            }
+            if($scope.currentStreak >= 10){
+                $rootScope.$broadcast('hot_streak_complete', {});
+            }
+
+            //save back to DB?
+        });
+
+        $scope.$on('levelcomplete', function(event, data){
+
+        });
+
+        $scope.$on('levelmastered', function(event, data){
+           console.log('UserInfoController received levelmastered');
+            console.log('levelid '+ data.levelid);
+
+            var masteredEvent = new Object();
+            //level completion event
+            //  eventType = "levelcomplete"
+            //  level
+            //  time
+            masteredEvent.eventType = "levelcomplete";
+            masteredEvent.level = data.levelid;
+            masteredEvent.timestamp = new Date().getTime();
+
+            //attach level selection events to the level completion event
+            masteredEvent.sequence = new Array();
+            setTimeout(function(){
+
+                //loop to add selection events to levelcomplete event
+                for(var i = 0; i < $scope.eventList.length; i++){
+                    //go through each event, if it is of type "selection"
+                    if($scope.eventList[i].eventType == "selection"){
+                        masteredEvent.sequence.push($scope.eventList[i]);
+                        //$scope.eventList = $scope.eventList.splice(i, 1);
+                    }
+                }
+
+                //removing selection events from the top level array
+                for(var i = 0; i < $scope.eventList.length; i++){
+                    if($scope.eventList[i].eventType == "selection"){
+                        $scope.eventList.splice(i, 1);
+                        i--;
+                    }
+                }
+
+                //this will incorrectly log ones where the feedback message pops up and the user goes back to selection
+
+                $scope.eventList.push(masteredEvent);
+                $scope.currentSequence = masteredEvent;
+                //how many total
+                //how many good
+                console.log("current sequence");
+                console.log($scope.currentSequence);
+                $scope.total_sequence = $scope.currentSequence.sequence.length;
+                $scope.missed_opportunities = 0;
+                for(var i = 0; i < $scope.currentSequence.sequence.length; i++){
+                    if($scope.currentSequence.sequence[i].mastered == true){
+                        $scope.missed_opportunities++;
+                    }
+                }
+                $scope.stars = Math.round((100 - 100*($scope.missed_opportunities/$scope.total_sequence))/20);
+                console.log("stars = "+$scope.stars);
+
+                $scope.$broadcast('stars_added', {stars: $scope.stars});
+
+                console.log($scope.eventList);
+            }, 500);
+        });
+
+        $scope.$on('stars_added', function(event, data){
+            console.log('received stars_added');
+            $scope.stars_earned = $scope.stars_earned + data.stars;
+            $scope.$digest();
+        })
+
+        $scope.$on('achievement_earned', function(event, data){
+            $scope.achievement_earned = data.achievement_id;
+            console.log(data);
+            console.log($scope.achievement_earned);
+            //$scope.$digest();
+        })
+    }
+])
+    .directive('problemHistory', function(){
+        return {
+            templateUrl: 'problemHistory.html'
+        }
+    });
 'use strict';
 
 //Menu service used for managing  menus
@@ -372,6 +725,676 @@ angular.module('core').service('Menus', [
 ]);
 'use strict';
 
+// Configuring the Articles module
+angular.module('kcomponents').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Kcomponents', 'kcomponents', 'dropdown', '/kcomponents(/create)?');
+		Menus.addSubMenuItem('topbar', 'kcomponents', 'List Kcomponents', 'kcomponents');
+		Menus.addSubMenuItem('topbar', 'kcomponents', 'New Kcomponent', 'kcomponents/create');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('kcomponents').config(['$stateProvider',
+	function($stateProvider) {
+		// Kcomponents state routing
+		$stateProvider.
+		state('listKcomponents', {
+			url: '/kcomponents',
+			templateUrl: 'modules/kcomponents/views/list-kcomponents.client.view.html'
+		}).
+		state('createKcomponent', {
+			url: '/kcomponents/create',
+			templateUrl: 'modules/kcomponents/views/create-kcomponent.client.view.html'
+		}).
+		state('viewKcomponent', {
+			url: '/kcomponents/:kcomponentId',
+			templateUrl: 'modules/kcomponents/views/view-kcomponent.client.view.html'
+		}).
+		state('editKcomponent', {
+			url: '/kcomponents/:kcomponentId/edit',
+			templateUrl: 'modules/kcomponents/views/edit-kcomponent.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Kcomponents controller
+angular.module('kcomponents').controller('KcomponentsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Kcomponents', '$rootScope',
+    function ($scope, $stateParams, $location, Authentication, Kcomponents, $rootScope) {
+        $scope.authentication = Authentication;
+
+        // Create new Kcomponent
+        $scope.create = function () {
+            // Create new Kcomponent object
+            var kcomponent = new Kcomponents({
+                name: this.name
+            });
+
+            // Redirect after save
+            kcomponent.$save(function (response) {
+                $location.path('kcomponents/' + response._id);
+
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Kcomponent
+        $scope.remove = function (kcomponent) {
+            if (kcomponent) {
+                kcomponent.$remove();
+
+                for (var i in $scope.kcomponents) {
+                    if ($scope.kcomponents [i] === kcomponent) {
+                        $scope.kcomponents.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.kcomponent.$remove(function () {
+                    $location.path('kcomponents');
+                });
+            }
+        };
+
+        // Update existing Kcomponent
+        $scope.update = function () {
+            var kcomponent = $scope.kcomponent;
+
+
+            kcomponent.$update(function () {
+                $location.path('kcomponents/' + kcomponent._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Update existing Kcomponent within scope
+        $scope.updateWithin = function (howmuch) {
+            //var kcomponent = $scope.updateKC ;
+            console.log(kcomponent);
+            //$scope.findOneArg($scope.updateKC._id);
+
+            var kcomponent = new Kcomponents(
+                $scope.updateKC
+            );
+            //kcomponent.percentComplete = Math.round(kcomponent.percentComplete + getRandomArbitrary(0, 25));
+            //kcomponent.percentComplete = kcomponent.percentComplete + 10;
+            if (howmuch == 1) {
+                kcomponent.percentComplete = kcomponent.percentComplete + 0;
+            }
+            else if (howmuch == 2) {
+                kcomponent.percentComplete = kcomponent.percentComplete + 7;
+            }
+            else if (howmuch == 3) {
+                kcomponent.percentComplete = kcomponent.percentComplete + 24;
+            }
+            function getRandomArbitrary(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            if (kcomponent.percentComplete >= 100) {
+                kcomponent.percentComplete = 100;
+                kcomponent.mastered = true;
+            }
+
+            kcomponent.$update(function () {
+                //$location.path('kcomponents/' + $scope.updateKC._id);
+
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Kcomponents
+        $scope.find = function () {
+            $scope.kcomponents = Kcomponents.query();
+            console.log($scope.kcomponents);
+        };
+
+        // Find existing Kcomponent
+        $scope.findOne = function () {
+            $scope.kcomponent = Kcomponents.get({
+                kcomponentId: $stateParams.kcomponentId
+
+            });
+            console.log($stateParams.kcomponentId);
+        };
+
+        // Find existing Kcomponent
+        $scope.findOneArg = function (id) {
+            $scope.updateKC = Kcomponents.get({
+                kcomponentId: id
+            });
+            console.log($scope.updateKC);
+        };
+
+        $scope.$on('KCbroadcast', function (event, args) {
+            console.log("received KCbroadcast:");
+            console.log(args);
+            for (var i = 0; i < args.kcs.length; i++) {
+                var kcomponent = args.kcs[i];
+
+                $scope.updateKC = kcomponent;
+                $scope.updateWithin(args.difficulty);
+            }
+
+            //$scope.$apply();
+            //instead of apply, emit back to the other controller so it knows to $apply
+            $scope.$emit('KCupdated', {});
+        });
+
+        $scope.reset_kcs = function () {
+            console.log('resetting kcs');
+            //for all kcs
+            console.log($scope);
+            for (var i = 0; i < $scope.kcomponents.length; i++) {
+                //set all mastered to false
+                //set all percentCompletes to 0
+                $scope.kcomponents[i].mastered = false;
+                $scope.kcomponents[i].percentComplete = 0;
+                //console.log($scope.kcomponents[i]);
+                $scope.kcomponents[i].$update(function (response) {
+                }, function (errorResponse) {
+                    $scope.error = errorResponse.data.message;
+                });
+            }
+        }
+
+        $scope.scenario2 = function () {
+            console.log('scenario 2');
+
+            for (var i = 0; i < $scope.kcomponents.length; i++) {
+                if (i >= 0 && i < 3) { //level 1
+                    $scope.kcomponents[i].percentComplete = 25;
+                    $scope.kcomponents[i].mastered = false;
+                }
+                if(i >= 3 && i < 6){ //level 2
+                    $scope.kcomponents[i].percentComplete = 25;
+                    $scope.kcomponents[i].mastered = false;
+                }
+                if(i >= 6 && i < 9){ //level 3
+                    $scope.kcomponents[i].percentComplete = 40;
+                    $scope.kcomponents[i].mastered = false;
+                }
+                if(i >= 9 && i < 12){ //level 4
+                    $scope.kcomponents[i].percentComplete = 40;
+                    $scope.kcomponents[i].mastered = false;
+                }
+                if(i >= 12 && i < 15){ //level 5
+                    $scope.kcomponents[i].percentComplete = 80;
+                    $scope.kcomponents[i].mastered = false;
+                }
+                if(i >= 15 && i < 18){ // level 6
+                    $scope.kcomponents[i].percentComplete = 100;
+                    $scope.kcomponents[i].mastered = true;
+                }
+                $scope.kcomponents[i].$update(function (response) {
+                    $location.path('/');
+                }, function (errorResponse) {
+                    $scope.error = errorResponse.data.message;
+                });
+            }
+        }
+
+    }
+]);
+'use strict';
+
+//Kcomponents service used to communicate Kcomponents REST endpoints
+angular.module('kcomponents').factory('Kcomponents', ['$resource',
+	function($resource) {
+		return $resource('kcomponents/:kcomponentId', { kcomponentId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+'use strict';
+
+// Configuring the Articles module
+angular.module('levels').run(['Menus',
+	function(Menus) {
+		// Set top bar menu items
+		Menus.addMenuItem('topbar', 'Levels', 'levels', 'dropdown', '/levels(/create)?');
+		Menus.addSubMenuItem('topbar', 'levels', 'List Levels', 'levels');
+		Menus.addSubMenuItem('topbar', 'levels', 'New Level', 'levels/create');
+	}
+]);
+'use strict';
+
+//Setting up route
+angular.module('levels').config(['$stateProvider',
+	function($stateProvider) {
+		// Levels state routing
+		$stateProvider.
+		state('listLevels', {
+			url: '/levels',
+			templateUrl: 'modules/levels/views/list-levels.client.view.html'
+		}).
+		state('createLevel', {
+			url: '/levels/create',
+			templateUrl: 'modules/levels/views/create-level.client.view.html'
+		}).
+		state('viewLevel', {
+			url: '/levels/:levelId',
+			templateUrl: 'modules/levels/views/view-level.client.view.html'
+		}).
+		state('editLevel', {
+			url: '/levels/:levelId/edit',
+			templateUrl: 'modules/levels/views/edit-level.client.view.html'
+		});
+	}
+]);
+'use strict';
+
+// Levels controller
+angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels', '$rootScope',
+    function ($scope, $stateParams, $location, Authentication, Levels, $rootScope) {
+        $scope.authentication = Authentication;
+
+        $scope.masteredLevel;
+        $scope.difficulty_sequence = "32122232";
+
+        // Create new Level
+        $scope.create = function () {
+            // Create new Level object
+            var level = new Levels({
+                name: this.name,
+                leveltype: this.leveltype,
+                icon: this.icon,
+                example1: this.example1,
+                example2: this.example2
+            });
+
+            // Redirect after save
+            level.$save(function (response) {
+                $location.path('levels/' + response._id);
+
+                // Clear form fields
+                $scope.name = '';
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Remove existing Level
+        $scope.remove = function (level) {
+            if (level) {
+                level.$remove();
+
+                for (var i in $scope.levels) {
+                    if ($scope.levels [i] === level) {
+                        $scope.levels.splice(i, 1);
+                    }
+                }
+            } else {
+                $scope.level.$remove(function () {
+                    $location.path('levels');
+                });
+            }
+        };
+
+        // Update existing Level
+        $scope.update = function () {
+            //parse kcomponents into an array
+
+            //set $scope.level.kcomponenets equal to the array
+            if ($scope.level.kcomponentList.length > 3) {
+                var res = $scope.level.kcomponentList.split(" ");
+                //console.log(res);
+
+                var level = $scope.level;
+                level.kcomponents = res;
+                delete level.kcomponentList;
+            }
+
+            level.$update(function () {
+                $location.path('levels/' + level._id);
+            }, function (errorResponse) {
+                $scope.error = errorResponse.data.message;
+            });
+        };
+
+        // Find a list of Levels
+        $scope.find = function () {
+            $scope.levels = Levels.query();
+            $scope.levels.$promise.then(function (result) {
+
+                //look for mismatch of mastered and kcs
+                console.log($scope.levels);
+                for (var i = 0; i < $scope.levels.length; i++) {
+                    //check level mastered
+
+                    var curlevel = $scope.levels[i];
+                    //console.log("scope mastered " + curlevel.mastered);
+                    var levelmastered = result[i].mastered;
+                    //console.log("levelmastered "+i+" "+levelmastered);
+
+                    //check kc mastered for each kc
+                    var kcmastered = true;
+                    $scope.levels[i].progress = 100;
+                    for (var j = 0; j < $scope.levels[i].kcomponents.length; j++) {
+                        if ($scope.levels[i].kcomponents[j].mastered == false) {
+                            kcmastered = false;
+                        }
+                        if ($scope.levels[i].progress > $scope.levels[i].kcomponents[j].percentComplete) {
+                            $scope.levels[i].progress = $scope.levels[i].kcomponents[j].percentComplete;
+                        }
+                    }
+                    //if all kc's mastered and level mastered is false
+
+                    if (levelmastered == false && kcmastered == true) {
+                        //update level mastered
+                        $scope.levels[i].mastered = true;
+                        //update to DB
+                        for (var k = 0; k < $scope.levels[i].kcomponents.length; k++) {
+                            $scope.levels[i].kcomponents[k] = $scope.levels[i].kcomponents[k]._id;
+                        }
+                        $scope.levels[i].user = $scope.levels[i].user._id;
+
+                        $scope.levels[i]
+                            .$update(function () {
+                                $scope.find();
+                            }, function (errorResponse) {
+                                $scope.error = errorResponse.data.message;
+                                console.log($scope.error);
+                            });
+                        //trigger level complete popup
+                        $rootScope.$broadcast("levelmastered", {levelid: i});
+                        console.log("levelmastered " + i);
+                    }
+                    else if (kcmastered == false && levelmastered == true) {
+                        $scope.levels[i].mastered = false;
+
+                        //update to DB
+                        for (var k = 0; k < $scope.levels[i].kcomponents.length; k++) {
+                            $scope.levels[i].kcomponents[k] = $scope.levels[i].kcomponents[k]._id;
+                        }
+                        $scope.levels[i].user = $scope.levels[i].user._id;
+
+                        $scope.levels[i]
+                            .$update(function () {
+                                $scope.find();
+                            }, function (errorResponse) {
+                                $scope.error = errorResponse.data.message;
+                            });
+                    }
+
+                }
+            });
+        };
+
+        // Find existing Level
+        $scope.findOne = function () {
+            $scope.level = Levels.get({
+                levelId: $stateParams.levelId
+            }, function () {
+                $scope.level.kcomponentList = "";
+                console.log($scope.level);
+                for (var i = 0; i < $scope.level.kcomponents.length; i++) {
+                    $scope.level.kcomponentList = $scope.level.kcomponentList + $scope.level.kcomponents[i] + " ";
+                }
+                $scope.level.kcomponentList = $scope.level.kcomponentList.substr(0, $scope.level.kcomponentList.length - 1);
+            });
+        };
+
+        // Find existing Level
+        $scope.findOneID = function (levelId) {
+            $scope.level = Levels.get({
+                levelId: levelId
+            }, function () {
+                $scope.level.kcomponentList = "";
+                console.log($scope.level);
+                $scope.level.progress = 100;
+                for (var i = 0; i < $scope.level.kcomponents.length; i++) {
+                    $scope.level.kcomponentList = $scope.level.kcomponentList + $scope.level.kcomponents[i] + " ";
+                    if ($scope.level.progress > $scope.level.kcomponents[i].percentComplete) {
+                        $scope.level.progress = $scope.level.kcomponents[i].percentComplete;
+                    }
+
+                }
+                $scope.level.kcomponentList = $scope.level.kcomponentList.substr(0, $scope.level.kcomponentList.length - 1);
+
+            });
+        };
+
+        //on level complete
+        $scope.complete_level = function () {
+            console.log("level completed");
+            $scope.level_complete_message = true;
+        }
+
+        $scope.level_complete_next = function () {
+            console.log("level complete next");
+            $scope.level_complete_message = false;
+            $scope.problem_selection_rating();
+        }
+        $scope.problem_selection_rating = function () {
+            console.log("problem selection rating show");
+            $scope.problem_selection_message = true;
+        }
+        $scope.problem_selection_next = function () {
+            console.log("problem selection next");
+            $scope.problem_selection_message = false;
+            $scope.suggested_level_message = true;
+        }
+        $scope.suggested_level_next = function () {
+            $scope.suggested_level_message = false;
+
+        }
+
+
+        //on bad level selection
+        $scope.bad_selection_click = function () {
+            console.log("bad selection");
+            $scope.bad_selection = true;
+        }
+        $scope.$on('alreadymastered', function () {
+            console.log("bad selection");
+            $scope.bad_selection = true;
+        });
+
+        $scope.bad_selection_next = function (a) {
+            $scope.bad_selection = false;
+            if (a == 1) {
+                $scope.problem_screen = false;
+            }
+        }
+
+
+        //on good level selection
+        $scope.positive_feedback_click = function () {
+            $scope.positive_feedback = true;
+
+        }
+        $scope.positive_feedback_next = function () {
+            $scope.positive_feedback = false;
+        }
+
+
+        $scope.daily_challenge_selected = 1;
+        $scope.daily_challenge_new = $scope.daily_challenge_selected;
+        $scope.select1 = true;
+        $scope.challenge_name = "I Ain't Scared";
+        //daily challenge
+        $scope.daily_challenge_click = function () {
+            $scope.daily_challenge = true;
+        }
+        $scope.prospective_challenge = function (a) {
+            $scope.daily_challenge_new = a;
+
+            if (a == 1) {
+                $scope.select1 = true;
+                $scope.select2 = false;
+                $scope.select3 = false;
+                $scope.challenge_name = "I Ain't Scared";
+            }
+            if (a == 2) {
+                $scope.select1 = false;
+                $scope.select2 = true;
+                $scope.select3 = false;
+                $scope.challenge_name = "Elemental Sampler";
+            }
+            if (a == 3) {
+                $scope.select1 = false;
+                $scope.select2 = false;
+                $scope.select3 = true;
+                $scope.challenge_name = "Hot Streak";
+            }
+        }
+        $scope.daily_challenge_next = function () {
+            $scope.daily_challenge = false;
+            $scope.daily_challenge_selected = $scope.daily_challenge_new;
+        }
+
+        $scope.$on('KCupdated', function () {
+            console.log("received KCupdated");
+
+            //hacky but it works?
+            setTimeout(function () {
+                $scope.find();
+            }, 500);
+        });
+
+        $scope.select_level = function (levelindex) {
+            console.log("select_level(" + levelindex + ")");
+            //check if mastered
+            var mastered = true;
+            for (var i = 0; i < $scope.levels[levelindex].kcomponents.length; i++) {
+                if ($scope.levels[levelindex].kcomponents[i].mastered == false) {
+                    mastered = false;
+                }
+            }
+            if (mastered == true) {
+                console.log('already mastered');
+                $scope.$broadcast('alreadymastered', {});
+                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: true});
+            }
+            else if (mastered == false) {
+                //$rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents});
+                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: false});
+            }
+        }
+
+        $scope.$on('levelmastered', function (event, data) {
+            console.log('LevelsClientController received levelmastered');
+            console.log('levelid = ' + data.levelid);
+
+            $scope.level_complete_message = true;
+
+            $scope.masteredLevel = $scope.levels[data.levelid];
+            console.log($scope.masteredLevel);
+        });
+
+        $scope.problem_screen = false;
+        $scope.hint_visible = false;
+        $scope.problem = new Object();
+        $scope.$on('levelselect', function (data, args) {
+            $scope.selectedLevel = $scope.levels[args.level];
+            $scope.problem_screen = true;
+
+            var sequence = $scope.levels[args.level].sequence.toString();
+            console.log(sequence);
+
+            var difficulty = parseInt(sequence.slice(0, 1));
+            $scope.levels[args.level].sequence = $scope.levels[args.level].sequence.slice(1) + difficulty;
+            console.log($scope.levels[args.level]);
+            //depopulate_level($scope.levels[args.level]).$update();
+            //console.log($scope.levels[args.level].sequence);
+
+
+            var difficulty = parseInt($scope.difficulty_sequence.slice(0, 1));
+            $scope.difficulty_sequence = $scope.difficulty_sequence.slice(1) + difficulty;
+            if (difficulty > 3 || difficulty < 1) {
+                difficulty = 2;
+            }
+            console.log("difficulty = " + difficulty);
+
+
+            $scope.problem.difficulty = difficulty;
+            $scope.levelindex = args.level;
+            $scope.hint_visible = false;
+        });
+
+        $scope.problem_complete = function (difficulty, levelindex, status) {
+            if (status == 1) { //proper return
+                console.log('problem complete');
+                console.log(difficulty +" "+levelindex+" "+status);
+                $scope.problem_screen = false;
+                $rootScope.$broadcast('levelcomplete', {difficulty: difficulty, level: levelindex});
+                console.log('$scope.levels: ');
+                console.log($scope.levels);
+
+                $rootScope.$broadcast('KCbroadcast', {
+                    kcs: $scope.levels[levelindex].kcomponents,
+                    difficulty: difficulty
+                });
+                console.log("broadcasted KCbroadcast");
+            }
+            else if (status == -1) { //back to selection
+                console.log('problem complete received '+ status+' , back to selection');
+                $scope.problem_screen = false;
+            }
+        }
+        $scope.hint_click = function () {
+            $scope.hint_visible = true;
+        }
+
+        $scope.aint_scared_complete = false;
+        $scope.$on('aint_scared_complete', function (event, data) {
+            console.log("received aint scared complete");
+            $scope.aint_scared_complete = true;
+        });
+
+        $scope.hot_streak_complete = false;
+        $scope.$on('hot_streak_complete', function (event, data) {
+            console.log("received hot streak complete");
+            $scope.hot_streak_complete = true;
+        });
+
+        $scope.trophy_case_show = false;
+        $scope.trophy_case_click = function (a) {
+            if (a == 1) {
+                $scope.trophy_case_show = true;
+            }
+            else {
+                $scope.trophy_case_show = false;
+            }
+        }
+    }
+]).directive('myKc', function () {
+    console.log();
+
+    //return{
+    //    restrict: 'E',
+    //    scope: {
+    //        id: '=info'
+    //    },
+    //    template: 'ID: {{id}}'
+    //};
+});
+'use strict';
+
+//Levels service used to communicate Levels REST endpoints
+angular.module('levels').factory('Levels', ['$resource',
+	function($resource) {
+		return $resource('levels/:levelId', { levelId: '@_id'
+		}, {
+			update: {
+				method: 'PUT'
+			}
+		});
+	}
+]);
+'use strict';
+
 // Config HTTP Error Handling
 angular.module('users').config(['$httpProvider',
 	function($httpProvider) {
@@ -450,7 +1473,7 @@ angular.module('users').config(['$stateProvider',
 angular.module('users').controller('AuthenticationController', ['$scope', '$http', '$location', 'Authentication',
 	function($scope, $http, $location, Authentication) {
 		$scope.authentication = Authentication;
-
+        //$scope.displayName = "test";
 		// If user is signed in then redirect back home
 		if ($scope.authentication.user) $location.path('/');
 
@@ -593,6 +1616,66 @@ angular.module('users').controller('SettingsController', ['$scope', '$http', '$l
 			});
 		};
 	}
+]);
+/**
+ * Created by zackaman on 12/2/14.
+ */
+'use strict';
+
+angular.module('users').controller('TestController', ['$scope', '$http', '$location', 'Authentication',
+    function($scope, $http, $location, Authentication) {
+        $scope.authentication = Authentication;
+        //$scope.displayName = "test";
+        // If user is signed in then redirect back home
+        if ($scope.authentication.user) $location.path('/');
+
+        $scope.displayName = "test";
+
+        $scope.signup = function() {
+            $http.post('/auth/signup', $scope.credentials).success(function(response) {
+                // If successful we assign the response to the global user model
+                $scope.authentication.user = response;
+
+                // And redirect to the index page
+                $location.path('/');
+            }).error(function(response) {
+                $scope.error = response.message;
+            });
+        };
+
+        $scope.signin = function() {
+            $http.post('/auth/signin', $scope.credentials).success(function(response) {
+                // If successful we assign the response to the global user model
+                $scope.authentication.user = response;
+
+                // And redirect to the index page
+                $location.path('/');
+            }).error(function(response) {
+                $scope.error = response.message;
+            });
+        };
+    }
+]);
+'use strict';
+
+angular.module('users').controller('UserInfoController2', ['$scope', 'Authentication', '$rootScope',
+    function($scope, Authentication, $rootScope) {
+        $scope.authentication = Authentication;
+
+        console.log(Authentication);
+
+        $scope.displayName = Authentication.user.displayName;
+        $scope.selectionLevel = Authentication.user.selectionLevel;
+        $scope.completionLevel = Authentication.user.completionLevel;
+
+        //$scope.displayName = "test name";
+
+        $scope.$on('levelselect', function(event, data){
+            console.log('UserInfoController received levelselect');
+            console.log(data.level);
+            console.log(data.mastered);
+        });
+    }
 ]);
 'use strict';
 

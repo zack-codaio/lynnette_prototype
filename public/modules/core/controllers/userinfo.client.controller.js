@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('UserInfoController', ['$scope', 'Authentication', 'Menus', '$rootScope',
-    function($scope, Authentication, Menus, $rootScope) {
+angular.module('core').controller('UserInfoController', ['$scope', 'Authentication', 'Menus', '$rootScope', 'Stars',
+    function($scope, Authentication, Menus, $rootScope, Stars) {
         $scope.authentication = Authentication;
 
         console.log(Authentication);
@@ -14,15 +14,12 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
         $scope.totalgood = 0; //if totalgood / totalall > .9 and totalall >= 10, then "I ain't scared" challenge is complete
         $scope.totalall = 0;
         $scope.percentgood = 0;
-        $scope.stars_earned = 0;
+        $scope.stars_earned = Stars.stars;
 
         $scope.session_total_unmastered = 0;
         //elemental sampler is triggered off of individual levels selected
 
         $scope.achievement_earned = 0;
-
-
-
 
         //keep a list of events
         $scope.eventList = new Array();

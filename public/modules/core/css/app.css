@@ -36,9 +36,7 @@ img{
     width:30%;
     overflow:scroll;
 }
-.personal{
 
-}
 .button{
     color:white;
     background:#2E3092;
@@ -104,7 +102,7 @@ img{
 margin-top:30px;
 }
 
-#achievements_container{
+.achievements_container{
     margin-top:50px;
 }
 
@@ -228,6 +226,7 @@ font-size:18px;
     right:0;
     bottom:0;
     left:0;
+    background: rgb(60, 60, 60);
     background: rgba(0,0,0,.8);
     padding-top:130px;
     text-align:center;
@@ -269,7 +268,7 @@ font-size:18px;
 }
 .bluebackground{
     background:#056ab4;
-    padding:0px;
+    padding:0;
 }
 
 .level_complete_badge{

@@ -69,6 +69,8 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
         achievements.a3 = false;
         achievements.a4 = false;
 
+		var audio = new Audio('/modules/achievements/img/bell.wav');
+
         $scope.achievement = new Object();
         $scope.achievement.title = "Run, Don't Walk";
         $scope.achievement.description = "Select three unmastered problems in a row.";
@@ -77,6 +79,10 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
         $scope.make_visible = false;
         $scope.$on("selectionStreak", function(event, data){
            if(data.streak == 3 && $scope.make_visible == false && achievements.a1 == false){
+
+
+			   audio.play();
+
                $scope.make_visible = true;
                achievements.a1 = true;
 
@@ -89,11 +95,12 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
                setTimeout(function(){
                    $scope.make_visible = false;
                    $scope.$digest();
-               }, 3500);
+               }, 5500);
            }
         });
         $scope.$on("total_unmastered", function(event, data){
             if(data.number == 10 && $scope.make_visible == false && achievements.a2 == false){
+				audio.play();
                 $scope.make_visible = true;
                 achievements.a2 = true;
 
@@ -106,7 +113,7 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
                 setTimeout(function(){
                     $scope.make_visible = false;
                     $scope.$digest();
-                }, 3500);
+                }, 5500);
             }
         });
 	}
