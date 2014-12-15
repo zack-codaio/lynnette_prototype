@@ -21,7 +21,7 @@
 
         <p class="modal_text" ng-if="missed_opportunities">
             You don't learn new things in problems you have already mastered!<br>
-            Can you identify which problems you could have skipped?
+            Can you identify which problems had mastery opportunities?
             <!--Click on the problems that did not have mastery opportunities.-->
         </p>
         <p class="modal_text" ng-if="missed_opportunities == 0">
@@ -29,8 +29,12 @@
         </p>
 
         <div class="challenge_column">
-            <p data-ng-repeat="item in currentSequence.sequence">
+            <p data-ng-repeat="item in currentSequence.sequence"  data-ng-click="explanatory_feedback($index, item.levelname)" ng-class="{greentext : levelselections[item.levelname].selected == true && levelselections[item.levelname].mastered == false, redtext : levelselections[item.levelname].selected == true && levelselections[item.levelname].mastered == true}">
+                <!--make green if selected for this levelname == true and mastered == false-->
+                <!--make red if selected for this levelname == true and mastered == true-->
+
                 {{$index + 1}}: {{item.levelname}}
+
             </p>
             <!--<p class="level_history">-->
             <!--1. Earth<br>-->
@@ -49,11 +53,11 @@
         <!--10. Earth<br>-->
         <!--</p>-->
         <!--</div>-->
-        <p class="modal_text greentext">
-            <!--Correct! The two Water problems (5 and 7) did not have additional mastery opportunities.-->
+        <p class="modal_text" ng-if="show_feedback" ng-class="{greentext : greentext}">
+            {{the_feedback}}
         </p>
 
-        <div class="button" data-ng-click="problem_selection_next()">
+        <div class="button" data-ng-click="problem_selection_next()" data-ng-if="continue">
             Continue
         </div>
     </div>

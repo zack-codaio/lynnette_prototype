@@ -26,6 +26,9 @@ img{
 .greentext{
     color: #008000;
 }
+.redtext{
+    color:#880000;
+}
 
 .sidebar{
     padding:25px;

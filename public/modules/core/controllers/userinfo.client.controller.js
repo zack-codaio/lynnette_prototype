@@ -116,7 +116,7 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
                 lynHistory.inc_streak(1);
             }
             else{
-                lynHistory.inc_sequence(-1);
+                lynHistory.inc_streak(-1);
             }
             lynHistory.totalall++;
             lynHistory.percentgood = Math.round((lynHistory.totalgood / (lynHistory.totalall))*100);
@@ -125,7 +125,6 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
 
             console.log("lynHistory");
             console.log(lynHistory);
-            console.log(lynHistory.eventList);
         });
 
         $scope.$on('levelcomplete', function(event, data){

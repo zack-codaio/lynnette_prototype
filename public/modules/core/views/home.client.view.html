@@ -3,23 +3,9 @@
 
 
 <div class="maincontain" data-ng-controller="LevelsController" data-ng-init="find()">
-<!--achievement-->
-<div class="achievement_popover" ng-controller="AchievementsController" ng-class="{'achievement_show' : make_visible}">
-    <div style="display:inline-block;width:25%;height:100%;vertical-align:top;">
-        <img src="/modules/core/img/achievements/{{achievement.icon}}.svg" class="img_inline">
-    </div>
-    <div style="display:inline-block; width:70%;vertical-align:top;">
-        <p class="achievement_title">
-            {{achievement.title}}
-        </p>
 
-        <p>
-
-            {{achievement.description}}
-        </p>
-    </div>
-</div>
-
+    <!--achievement directive-->
+    <achievement-popover></achievement-popover>
 
 <!--modal dialogues-->
 <div class="blockUI" data-ng-show="problem_screen">

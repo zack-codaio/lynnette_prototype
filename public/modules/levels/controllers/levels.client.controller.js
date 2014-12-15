@@ -185,10 +185,13 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         }
         $scope.problem_selection_rating = function () {
             console.log("problem selection rating show");
+            $rootScope.$broadcast('history_show', {});
             $scope.problem_selection_message = true;
         }
         $scope.problem_selection_next = function () {
             console.log("problem selection next");
+            $rootScope.$broadcast('history_done', {});
+
             $scope.problem_selection_message = false;
             $scope.suggested_level_message = true;
         }

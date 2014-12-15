@@ -173,6 +173,7 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
         achievements.a4 = false;
 
 		var audio = new Audio('/modules/achievements/img/bell.wav');
+		//from http://www.freesound.org/people/Zabuhailo/sounds/178645/
 
         $scope.achievement = new Object();
         $scope.achievement.title = "Run, Don't Walk";
@@ -221,6 +222,18 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
         });
 	}
 ]);
+/**
+ * Created by zackaman on 12/15/14.
+ */
+
+'use strict';
+
+angular.module('achievements').directive('achievementPopover',  function(){
+    return {
+        restrict: "E",
+        templateUrl: '/modules/achievements/directives/achievement.html'
+    }
+});
 'use strict';
 
 //Achievements service used to communicate Achievements REST endpoints
@@ -387,10 +400,89 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 		$scope.authentication = Authentication;
 	}
 ]);
+/**
+ * Created by zackaman on 12/14/14.
+ */
+
 'use strict';
 
-angular.module('core').controller('UserInfoController', ['$scope', 'Authentication', 'Menus', '$rootScope', 'Stars', 'ProblemHistory',
-    function($scope, Authentication, Menus, $rootScope, Stars, ProblemHistory) {
+angular.module('core').controller('SequenceController', ['$scope', '$rootScope', 'Stars', 'lynHistory',
+    function($scope, $rootScope, Stars, lynHistory) {
+
+        //watch lynHistory for currentSequence
+        $scope.currentSequence = $scope.$watch(function(){
+                return lynHistory.currentSequence;
+            },
+            function (newVal, oldVal){
+                if(typeof newVal !== 'undefined'){
+                    console.log('currentSequence');
+                    console.log(lynHistory.currentSequence);
+                    $scope.currentSequence = lynHistory.currentSequence;
+                }
+            });
+
+        //watch lynHistory for stars
+        $scope.stars = $scope.$watch(function(){
+                return lynHistory.stars;
+            },
+            function (newVal, oldVal){
+                if(typeof newVal !== 'undefined'){
+                    $scope.stars = lynHistory.stars;
+                }
+            });
+
+        //watch lynHistory for missed_opportunities
+        $scope.missed_opportunities = $scope.$watch(function(){
+                return lynHistory.missed_opportunities;
+            },
+            function (newVal, oldVal){
+                if(typeof newVal !== 'undefined'){
+                    $scope.missed_opportunities = lynHistory.missed_opportunities;
+                }
+            });
+
+        //watch lynHistory for total_sequence
+        $scope.total_sequence = $scope.$watch(function(){
+                return lynHistory.total_sequence;
+            },
+            function (newVal, oldVal){
+                if(typeof newVal !== 'undefined'){
+                    $scope.total_sequence = lynHistory.total_sequence;
+                }
+            });
+
+        $scope.show_feedback = false;
+        $scope.the_feedback = "";
+        $scope.greentext = false;
+        $scope.explanatory_feedback = function(index){
+            console.log("explanatory feedback for "+index);
+            console.log($scope.currentSequence.sequence);
+            if($scope.currentSequence.sequence[index].mastered == true){
+                $scope.greentext = false;
+                $scope.the_feedback = $scope.currentSequence.sequence[index].levelname+" was already mastered, so it did not have any additional opportunities for mastery."
+
+            }
+
+            else if($scope.currentSequence.sequence[index].mastered == false){
+                $scope.greentext = true;
+                $scope.the_feedback = "Correct! "+ $scope.currentSequence.sequence[index].levelname+" was unmastered and so had opportunities for mastery.  Picking "+$scope.currentSequence.sequence[index].levelname+" was a good choice."
+            }
+
+            $scope.show_feedback = true;
+        }
+
+
+        $scope.$on('history_done', function(event, data){
+           $scope.show_feedback = false;
+        });
+
+    }
+]);
+
+'use strict';
+
+angular.module('core').controller('UserInfoController', ['$scope', 'Authentication', 'Menus', '$rootScope', 'Stars', 'lynHistory',
+    function($scope, Authentication, Menus, $rootScope, Stars, lynHistory) {
         $scope.authentication = Authentication;
 
         console.log(Authentication);
@@ -398,12 +490,72 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
         $scope.displayName = Authentication.user.displayName;
         $scope.selectionLevel = Authentication.user.selectionLevel;
         $scope.completionLevel = Authentication.user.completionLevel;
-        $scope.currentSequence;
-        $scope.currentStreak = 0; //if this = 10, hot streak challenge is complete
-        $scope.totalgood = 0; //if totalgood / totalall > .9 and totalall >= 10, then "I ain't scared" challenge is complete
-        $scope.totalall = 0;
-        $scope.percentgood = 0;
-        //$scope.stars_earned = Stars.stars;
+
+
+        //watch lynHistory for currentSequence
+        $scope.currentSequence = $scope.$watch(function(){
+            return lynHistory.currentSequence;
+        },
+        function (newVal, oldVal){
+           if(typeof newVal !== 'undefined'){
+               $scope.currentSequence = lynHistory.currentSequence;
+           }
+        });
+
+        //watch lynHistory for currentStreak
+        $scope.currentStreak = $scope.$watch(function(){
+            return lynHistory.currentStreak;
+
+        },
+        function(newVal, oldVal){
+            if(typeof newVal !== 'undefined'){
+                $scope.currentStreak = lynHistory.currentStreak;
+                //if this = 10, hot streak challenge is complete
+            }
+        });
+
+        //watch lynHistory for totalgood
+        //if totalgood / totalall > .9 and totalall >= 10, then "I ain't scared" challenge is complete
+        $scope.totalgood = $scope.$watch(function(){
+           return lynHistory.totalgood;
+        },
+            function(newVal, oldVal){
+            if(typeof newVal !== 'undefined'){
+             $scope.totalgood = lynHistory.totalgood;
+            }
+        });
+
+        //watch lynHistory for totalall
+        $scope.totalall = $scope.$watch(function(){
+            return lynHistory.totalall;
+        },
+            function(newVal, oldVal){
+                if(typeof newVal !== 'undefined'){
+                    $scope.totalall = lynHistory.totalall;
+                }
+
+        });
+
+        //watch lynHistory for percentgood
+        $scope.percentgood = $scope.$watch(function(){
+            return lynHistory.percentgood;
+        },
+        function(newVal, oldVal){
+            if(typeof newVal !== 'undefined'){
+                $scope.percentgood = lynHistory.percentgood;
+            }
+        });
+
+        //watch lynHistory for session_total_unmastered
+        $scope.session_total_unmastered = $scope.$watch(function(){
+            return lynHistory.session_total_unmastered;
+        }, function(newVal, oldVal){
+            if(typeof newVal !== 'undefined'){
+                $scope.session_total_unmastered = newVal;
+            }
+        })
+
+        //watch Stars for stars_earned
         $scope.stars_earned = $scope.$watch(function(){
             return Stars.stars;
         },
@@ -413,74 +565,47 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
             }
         });
 
-        console.log(ProblemHistory);
+        //watch lynHistory for eventList, which contains the sequence of events
+        $scope.eventList = $scope.$watch(function(){
+            return lynHistory.eventList;
+        }, function(newVal, oldVal){
+           if(typeof newVal !== 'undefined'){
+               $scope.eventList = lynHistory.eventList;
+           }
+        });
 
-        $scope.session_total_unmastered = 0;
         //elemental sampler is triggered off of individual levels selected
-
         $scope.achievement_earned = 0;
-
-        //keep a list of events
-        $scope.eventList = new Array();
-        //selection event
-        //  eventType = "selection"
-        //  level
-        //  mastered
-        //  % completed?
-        //  time
-        //level completion event
-        //  eventType = "levelcomplete"
-        //  level
-        //  time
-        //achievement event?
-
 
         $scope.$on('levelselect', function(event, data){
             console.log('UserInfoController received levelselect');
-            //console.log(data.level);
-            //console.log(data.mastered);
 
-            var selectionEvent = new Object();
             //selection event
             //  eventType = "selection"
             //  level
             //  mastered
             //  % completed?
             //  time
+            var selectionEvent = new Object();
             selectionEvent.eventType = "selection";
             selectionEvent.level = data.level;
             selectionEvent.mastered = data.mastered;
+            selectionEvent.levelname = data.levelname;
             selectionEvent.timestamp = new Date().getTime();
 
             if(data.mastered == false){
-                $scope.currentStreak++;
-                $rootScope.$broadcast("selectionStreak", {streak: $scope.currentStreak});
-                console.log("currentStreak");
-                console.log($scope.currentStreak);
-                $scope.totalgood++;
-                $scope.session_total_unmastered++;
-                $rootScope.$broadcast("total_unmastered", {number: $scope.session_total_unmastered});
+                lynHistory.inc_streak(1);
             }
             else{
-                $scope.currentStreak = 0;
+                lynHistory.inc_streak(-1);
             }
-            $scope.totalall++;
-            $scope.percentgood = Math.round(($scope.totalgood / ($scope.totalall))*100);
+            lynHistory.totalall++;
+            lynHistory.percentgood = Math.round((lynHistory.totalgood / (lynHistory.totalall))*100);
 
-            $scope.eventList.push(selectionEvent);
-            console.log($scope.eventList);
+            lynHistory.eventList.push(selectionEvent);
 
-            //if($scope.totalall >= 10 && $scope.percentgood >= 90){
-            //    $rootScope.$broadcast('aint_scared_complete', {});
-            //}
-            if($scope.totalall == 5){
-                $rootScope.$broadcast('aint_scared_complete', {});
-            }
-            if($scope.currentStreak >= 10){
-                $rootScope.$broadcast('hot_streak_complete', {});
-            }
-
-            //save back to DB?
+            console.log("lynHistory");
+            console.log(lynHistory);
         });
 
         $scope.$on('levelcomplete', function(event, data){
@@ -505,66 +630,47 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
             setTimeout(function(){
 
                 //loop to add selection events to levelcomplete event
-                for(var i = 0; i < $scope.eventList.length; i++){
+                for(var i = 0; i < lynHistory.eventList.length; i++){
                     //go through each event, if it is of type "selection"
-                    if($scope.eventList[i].eventType == "selection"){
-                        masteredEvent.sequence.push($scope.eventList[i]);
+                    if(lynHistory.eventList[i].eventType == "selection"){
+                        masteredEvent.sequence.push(lynHistory.eventList[i]);
                         //$scope.eventList = $scope.eventList.splice(i, 1);
                     }
                 }
 
                 //removing selection events from the top level array
-                for(var i = 0; i < $scope.eventList.length; i++){
-                    if($scope.eventList[i].eventType == "selection"){
-                        $scope.eventList.splice(i, 1);
+                for(var i = 0; i < lynHistory.eventList.length; i++){
+                    if(lynHistory.eventList[i].eventType == "selection"){
+                        lynHistory.eventList.splice(i, 1);
                         i--;
                     }
                 }
 
                 //this will incorrectly log ones where the feedback message pops up and the user goes back to selection
+                lynHistory.eventList.push(masteredEvent);
+                lynHistory.currentSequence = masteredEvent;
 
-                $scope.eventList.push(masteredEvent);
-                $scope.currentSequence = masteredEvent;
                 //how many total
                 //how many good
-                console.log("current sequence");
-                console.log($scope.currentSequence);
-                $scope.total_sequence = $scope.currentSequence.sequence.length;
-                $scope.missed_opportunities = 0;
-                for(var i = 0; i < $scope.currentSequence.sequence.length; i++){
-                    if($scope.currentSequence.sequence[i].mastered == true){
-                        $scope.missed_opportunities++;
+                lynHistory.total_sequence = lynHistory.currentSequence.sequence.length;
+                lynHistory.missed_opportunities = 0;
+                for(var i = 0; i < lynHistory.currentSequence.sequence.length; i++){
+                    if(lynHistory.currentSequence.sequence[i].mastered == true){
+                        lynHistory.missed_opportunities++;
                     }
                 }
-                $scope.stars = Math.round((100 - 100*($scope.missed_opportunities/$scope.total_sequence))/20);
-                console.log("stars = "+$scope.stars);
-
-                $scope.$broadcast('stars_added', {stars: $scope.stars});
-
-                console.log($scope.eventList);
+                lynHistory.stars = Math.round((100 - 100*(lynHistory.missed_opportunities/lynHistory.total_sequence))/20);
+                Stars.add_stars(lynHistory.stars);
             }, 500);
         });
-
-        $scope.$on('stars_added', function(event, data){
-            console.log('received stars_added');
-            //$scope.stars_earned = $scope.stars_earned + data.stars;
-            Stars.add_stars(data.stars);
-            //$scope.$digest();
-        })
 
         $scope.$on('achievement_earned', function(event, data){
             $scope.achievement_earned = data.achievement_id;
             console.log(data);
             console.log($scope.achievement_earned);
-            //$scope.$digest();
         })
     }
 ])
-    .directive('problemHistory', function(){
-        return {
-            templateUrl: 'problemHistory.html'
-        }
-    });
 
 
 
@@ -739,24 +845,87 @@ angular.module('core').service('Menus', [
 /**
  * Created by zackaman on 12/14/14.
  */
+angular.module('core').directive('problemHistory',  function(){
+    return {
+        restrict: "E",
+        templateUrl: '/modules/core/directives/problemHistory.html'
+    }
+});
+'use strict';
+
+/**
+ * Created by zackaman on 12/14/14.
+ */
 
 
-angular.module('core').service('ProblemHistory', function(){
+angular.module('core').service('lynHistory', ['$rootScope', function($rootScope){
     var history = new Object();
-    //history.currentSequence;
-    //history.currentStreak = 0;
-    //history.totalgood = 0;
-    //history.totalall = 0;
-    //history.percentgood = 0;
+    history.currentSequence;
+    history.currentStreak = 0;
+    history.totalgood = 0;
+    history.totalall = 0;
+    history.percentgood = 0;
+    history.session_total_unmastered = 0;
+    history.problem_selection_message = false;
+    //missed opportunities
+    history.missed_opportunities = 0;
+    //stars
+    history.stars = 0;
+    history.total_sequence = 0;
 
-    //history.add_stars = function(a){
-    //    history.stars += a;
-    //    console.log("ADDING STARS: now "+history.stars);
-    //    //$scope.$digest();
-    //};
+    //keep a list of events
+    history.eventList = new Array();
+    //selection event
+    //  eventType = "selection"
+    //  level
+    //  mastered
+    //  % completed?
+    //  time
+    //level completion event
+    //  eventType = "levelcomplete"
+    //  level
+    //  time
+    //achievement event?
+
+    history.inc_streak = function(a){
+        if(a !== -1){
+            history.currentStreak += a;
+            history.totalgood++;
+            history.session_total_unmastered++;
+
+            if(history.totalall == 5){
+                $rootScope.$broadcast('aint_scared_complete', {});
+            }
+            if(history.currentStreak == 10){
+                $rootScope.$broadcast('hot_streak_complete', {});
+            }
+            //save back to DB?
+        }
+        else{
+            history.currentStreak = 0;
+        }
+
+        $rootScope.$broadcast("selectionStreak", {streak: history.currentStreak});
+        $rootScope.$broadcast("total_unmastered", {number: history.session_total_unmastered});
+    }
+
+
+
+
 
     return history;
-});
+
+
+    //var serviceInstance = new Object();
+    //serviceInstance.stars = 3;
+    //serviceInstance.add_stars = function(a){
+    //    serviceInstance.stars += a;
+    //    console.log("ADDING STARS: now "+serviceInstance.stars);
+    //    //$scope.$digest();
+    //};
+    //
+    //return serviceInstance;
+}]);
 'use strict';
 
 /**
@@ -1047,8 +1216,8 @@ angular.module('levels').config(['$stateProvider',
 'use strict';
 
 // Levels controller
-angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels', '$rootScope', 'Stars',
-    function ($scope, $stateParams, $location, Authentication, Levels, $rootScope, Stars) {
+angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels', '$rootScope', 'Stars', 'lynHistory',
+    function ($scope, $stateParams, $location, Authentication, Levels, $rootScope, Stars, lynHistory) {
         $scope.authentication = Authentication;
 
         $scope.masteredLevel;
@@ -1235,6 +1404,8 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         }
         $scope.problem_selection_next = function () {
             console.log("problem selection next");
+            $rootScope.$broadcast('history_done', {});
+
             $scope.problem_selection_message = false;
             $scope.suggested_level_message = true;
         }
@@ -1328,11 +1499,11 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             if (mastered == true) {
                 console.log('already mastered');
                 $scope.$broadcast('alreadymastered', {});
-                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: true});
+                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: true, levelname: $scope.levels[levelindex].leveltype});
             }
             else if (mastered == false) {
                 //$rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents});
-                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: false});
+                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: false, levelname: $scope.levels[levelindex].leveltype});
             }
         }
 
