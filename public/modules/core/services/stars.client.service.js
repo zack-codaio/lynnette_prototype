@@ -6,6 +6,13 @@
 
 
 angular.module('core').service('Stars', function(){
-    var serviceInstance = {stars: 3};
+    var serviceInstance = new Object();
+        serviceInstance.stars = 3;
+    serviceInstance.add_stars = function(a){
+        serviceInstance.stars += a;
+        console.log("ADDING STARS: now "+serviceInstance.stars);
+        //$scope.$digest();
+    };
+
     return serviceInstance;
 });

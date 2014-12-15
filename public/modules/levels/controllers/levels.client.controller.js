@@ -1,8 +1,8 @@
 'use strict';
 
 // Levels controller
-angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels', '$rootScope',
-    function ($scope, $stateParams, $location, Authentication, Levels, $rootScope) {
+angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels', '$rootScope', 'Stars', 'lynHistory',
+    function ($scope, $stateParams, $location, Authentication, Levels, $rootScope, Stars, lynHistory) {
         $scope.authentication = Authentication;
 
         $scope.masteredLevel;
@@ -113,6 +113,7 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
                                 console.log($scope.error);
                             });
                         //trigger level complete popup
+                        console.log("broadcasting levelmastered");
                         $rootScope.$broadcast("levelmastered", {levelid: i});
                         console.log("levelmastered " + i);
                     }
@@ -281,11 +282,11 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             if (mastered == true) {
                 console.log('already mastered');
                 $scope.$broadcast('alreadymastered', {});
-                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: true});
+                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: true, levelname: $scope.levels[levelindex].leveltype});
             }
             else if (mastered == false) {
                 //$rootScope.$broadcast('KCbroadcast', {kcs: $scope.levels[levelindex].kcomponents});
-                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: false});
+                $rootScope.$broadcast('levelselect', {level: levelindex, mastered: false, levelname: $scope.levels[levelindex].leveltype});
             }
         }
 
@@ -357,12 +358,14 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         $scope.$on('aint_scared_complete', function (event, data) {
             console.log("received aint scared complete");
             $scope.aint_scared_complete = true;
+            Stars.add_stars(2);
         });
 
         $scope.hot_streak_complete = false;
         $scope.$on('hot_streak_complete', function (event, data) {
             console.log("received hot streak complete");
             $scope.hot_streak_complete = true;
+            //Stars.add_stars(2);
         });
 
         $scope.trophy_case_show = false;

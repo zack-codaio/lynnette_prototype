@@ -165,66 +165,9 @@
         </div>
     </div>
 </div>
-<div class="blockUI" data-ng-show="problem_selection_message" ng-controller="UserInfoController">
-    <div class="modalpop">
-        <h1>Problem Selection Recap</h1>
+<!--<div class="blockUI" data-ng-show="problem_selection_message" ng-controller="UserInfoController">-->
+<problem-history data-ng-show="problem_selection_message"></problem-history>
 
-        <div style="height:50px;">
-            <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 1">
-            <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 2">
-            <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 3">
-            <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 4">
-            <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 5">
-            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 5">
-            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 4">
-            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 3">
-            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 2">
-            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 1">
-
-        </div>
-        <p class="modal_text">
-            You solved {{total_sequence}} problems, {{missed_opportunities}} of which did not help you toward mastery.
-        </p>
-
-        <p class="modal_text" ng-if="missed_opportunities">
-            You don't learn new things in problems you have already mastered!<br>
-            Can you identify which problems you could have skipped?
-            <!--Click on the problems that did not have mastery opportunities.-->
-        </p>
-        <p class="modal_text" ng-if="missed_opportunities == 0">
-            Great job! You chose only problems you haven't already mastered.
-        </p>
-
-        <div class="challenge_column">
-            <p data-ng-repeat="item in currentSequence.sequence">
-                {{$index + 1}}: Level {{item.level + 1}}
-            </p>
-            <!--<p class="level_history">-->
-            <!--1. Earth<br>-->
-            <!--2. Fire<br>-->
-            <!--3. Earth<br>-->
-            <!--4. Earth<br>-->
-            <!--5. Water<br>-->
-            <!--</p>-->
-        </div>
-        <!--<div class="challenge_column">-->
-        <!--<p class="level_history">-->
-        <!--6. Earth<br>-->
-        <!--7. Water<br>-->
-        <!--8. Fire<br>-->
-        <!--9. Earth<br>-->
-        <!--10. Earth<br>-->
-        <!--</p>-->
-        <!--</div>-->
-        <p class="modal_text greentext">
-            <!--Correct! The two Water problems (5 and 7) did not have additional mastery opportunities.-->
-        </p>
-
-        <div class="button" data-ng-click="problem_selection_next()">
-            Continue
-        </div>
-    </div>
-</div>
 <div class="blockUI" data-ng-show="suggested_level_message">
     <div class="modalpop">
         <h1>Earth - Complete!</h1>

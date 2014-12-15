@@ -389,8 +389,8 @@ angular.module('core').controller('HomeController', ['$scope', 'Authentication',
 ]);
 'use strict';
 
-angular.module('core').controller('UserInfoController', ['$scope', 'Authentication', 'Menus', '$rootScope',
-    function($scope, Authentication, Menus, $rootScope) {
+angular.module('core').controller('UserInfoController', ['$scope', 'Authentication', 'Menus', '$rootScope', 'Stars', 'ProblemHistory',
+    function($scope, Authentication, Menus, $rootScope, Stars, ProblemHistory) {
         $scope.authentication = Authentication;
 
         console.log(Authentication);
@@ -403,15 +403,22 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
         $scope.totalgood = 0; //if totalgood / totalall > .9 and totalall >= 10, then "I ain't scared" challenge is complete
         $scope.totalall = 0;
         $scope.percentgood = 0;
-        $scope.stars_earned = 0;
+        //$scope.stars_earned = Stars.stars;
+        $scope.stars_earned = $scope.$watch(function(){
+            return Stars.stars;
+        },
+        function(newVal, oldVal){
+            if(typeof newVal !== 'undefined'){
+                $scope.stars_earned = Stars.stars;
+            }
+        });
+
+        console.log(ProblemHistory);
 
         $scope.session_total_unmastered = 0;
         //elemental sampler is triggered off of individual levels selected
 
         $scope.achievement_earned = 0;
-
-
-
 
         //keep a list of events
         $scope.eventList = new Array();
@@ -466,7 +473,7 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
             //if($scope.totalall >= 10 && $scope.percentgood >= 90){
             //    $rootScope.$broadcast('aint_scared_complete', {});
             //}
-            if($scope.totalall >= 5){
+            if($scope.totalall == 5){
                 $rootScope.$broadcast('aint_scared_complete', {});
             }
             if($scope.currentStreak >= 10){
@@ -540,8 +547,9 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
 
         $scope.$on('stars_added', function(event, data){
             console.log('received stars_added');
-            $scope.stars_earned = $scope.stars_earned + data.stars;
-            $scope.$digest();
+            //$scope.stars_earned = $scope.stars_earned + data.stars;
+            Stars.add_stars(data.stars);
+            //$scope.$digest();
         })
 
         $scope.$on('achievement_earned', function(event, data){
@@ -557,6 +565,9 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
             templateUrl: 'problemHistory.html'
         }
     });
+
+
+
 'use strict';
 
 //Menu service used for managing  menus
@@ -723,6 +734,47 @@ angular.module('core').service('Menus', [
 		this.addMenu('topbar');
 	}
 ]);
+'use strict';
+
+/**
+ * Created by zackaman on 12/14/14.
+ */
+
+
+angular.module('core').service('ProblemHistory', function(){
+    var history = new Object();
+    //history.currentSequence;
+    //history.currentStreak = 0;
+    //history.totalgood = 0;
+    //history.totalall = 0;
+    //history.percentgood = 0;
+
+    //history.add_stars = function(a){
+    //    history.stars += a;
+    //    console.log("ADDING STARS: now "+history.stars);
+    //    //$scope.$digest();
+    //};
+
+    return history;
+});
+'use strict';
+
+/**
+ * Created by zackaman on 12/14/14.
+ */
+
+
+angular.module('core').service('Stars', function(){
+    var serviceInstance = new Object();
+        serviceInstance.stars = 3;
+    serviceInstance.add_stars = function(a){
+        serviceInstance.stars += a;
+        console.log("ADDING STARS: now "+serviceInstance.stars);
+        //$scope.$digest();
+    };
+
+    return serviceInstance;
+});
 'use strict';
 
 // Configuring the Articles module
@@ -995,8 +1047,8 @@ angular.module('levels').config(['$stateProvider',
 'use strict';
 
 // Levels controller
-angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels', '$rootScope',
-    function ($scope, $stateParams, $location, Authentication, Levels, $rootScope) {
+angular.module('levels').controller('LevelsController', ['$scope', '$stateParams', '$location', 'Authentication', 'Levels', '$rootScope', 'Stars',
+    function ($scope, $stateParams, $location, Authentication, Levels, $rootScope, Stars) {
         $scope.authentication = Authentication;
 
         $scope.masteredLevel;
@@ -1107,6 +1159,7 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
                                 console.log($scope.error);
                             });
                         //trigger level complete popup
+                        console.log("broadcasting levelmastered");
                         $rootScope.$broadcast("levelmastered", {levelid: i});
                         console.log("levelmastered " + i);
                     }
@@ -1351,12 +1404,14 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         $scope.$on('aint_scared_complete', function (event, data) {
             console.log("received aint scared complete");
             $scope.aint_scared_complete = true;
+            Stars.add_stars(2);
         });
 
         $scope.hot_streak_complete = false;
         $scope.$on('hot_streak_complete', function (event, data) {
             console.log("received hot streak complete");
             $scope.hot_streak_complete = true;
+            //Stars.add_stars(2);
         });
 
         $scope.trophy_case_show = false;

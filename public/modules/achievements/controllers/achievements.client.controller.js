@@ -70,6 +70,7 @@ angular.module('achievements').controller('AchievementsController', ['$scope', '
         achievements.a4 = false;
 
 		var audio = new Audio('/modules/achievements/img/bell.wav');
+		//from http://www.freesound.org/people/Zabuhailo/sounds/178645/
 
         $scope.achievement = new Object();
         $scope.achievement.title = "Run, Don't Walk";
