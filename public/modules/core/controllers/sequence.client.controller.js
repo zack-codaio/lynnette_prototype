@@ -6,6 +6,8 @@
 
 angular.module('core').controller('SequenceController', ['$scope', '$rootScope', 'Stars', 'lynHistory',
     function($scope, $rootScope, Stars, lynHistory) {
+        $scope.myStyle = "test test";
+
 
         //watch lynHistory for currentSequence
         $scope.currentSequence = $scope.$watch(function(){
@@ -136,6 +138,15 @@ angular.module('core').controller('SequenceController', ['$scope', '$rootScope',
                 }
             }
             //console.log($scope.levelselections);
+
+            if(lynHistory.currentSequence.sequence.length >= 8){
+            $scope.sequence1 = lynHistory.currentSequence.sequence;
+            $scope.sequence2 = $scope.sequence1.splice(Math.ceil($scope.sequence1.length*10/2)/10);
+                $scope.sequence1length = $scope.sequence1.length;
+            }
+            else{
+                $scope.sequence1 = lynHistory.currentSequence.sequence;
+            }
 
         });
 

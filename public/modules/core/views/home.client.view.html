@@ -4,6 +4,214 @@
 
 <div class="maincontain" data-ng-controller="LevelsController" data-ng-init="find()">
 
+
+    <div data-ng-controller="OnboardingController">
+        <!--INTRO:-->
+        <!--1 welcome to lynnette-->
+        <!--2 definition of mastery-->
+        <!--3 how it works-->
+        <!--4 how to apply mastery-->
+        <!--TUTORIAL:-->
+            <!--doneish-->
+        <!--5 avatars, stars, problem selection-->
+            <!--doneish-->
+        <!--6 daily challenges-->
+            <!--doneish-->
+        <!--7 mastery bar-->
+            <!--doneish-->
+        <!--8 achievements-->
+            <!--don't think i'm going to do this-->
+
+        <!--welcome to lynnette-->
+        <div class="blockUI" ng-if="tutorial == 1">
+            <div class="modalpop">
+                <div class="level_complete_badge">
+                    <img src="/modules/core/img/welcomerobot.svg">
+                </div>
+                <h1>Welcome!</h1>
+
+                <p class="modal_text">
+                    In Lynnette, you have the opportunity to master new skills. More importantly, Lynnette's goal is to teach good problem selection strategies that can be applied in any subject.
+                </p>
+
+                <div>
+                    <div class="button button-inline" style="width:160px;margin-top:10px;margin-right:0;" ng-click="next()">Next</div>
+                </div>
+            </div>
+        </div>
+
+        <!--definition of mastery-->
+        <div class="blockUI" ng-if="tutorial == 2">
+            <div class="modalpop">
+                <div class="level_complete_badge">
+                    <img src="/modules/core/img/brain.svg">
+                </div>
+                <h1>Mastery</h1>
+
+                <p class="modal_text">
+                    Central to Lynnette is the idea of "mastery." Mastery isn't about how many problems you have done, but about your ability to consistently do well on a type of problem.
+                    <br><br>
+                    The way to master more types of problems is to focus on areas you have not yet mastered. Working on problem types you have already mastered can be good for review, but is not helpful in learning new material.
+                </p>
+
+                <div>
+                    <div class="button button-inline" style="margin-left:0;width:160px;margin-top:10px;" ng-click="back()">Back</div>
+                    <div class="button button-inline" style="width:160px;margin-top:10px;margin-right:0;" ng-click="next()">Next</div>
+                </div>
+            </div>
+        </div>
+
+        <!--how it works-->
+        <div class="blockUI" ng-if="tutorial == 3">
+            <div class="modalpop">
+                <div class="level_complete_badge">
+                    <img src="/modules/core/img/howitworks.svg">
+                </div>
+                <h1>How it Works</h1>
+
+                <p class="modal_text">
+                    Lynnette helps you keep track of your mastery by estimating how likely you are to be able to do a problem correctly.
+                    <br><br>
+                    Challenging, unmastered problems are the best kind to attempt&mdash;don't get discouraged if a problem is difficult, the feedback and hints are specifically designed to help you learn new skills so don't forget to use them!
+                </p>
+
+                <div>
+                    <div class="button button-inline" style="margin-left:0;width:160px;margin-top:10px;" ng-click="back()">Back</div>
+                    <div class="button button-inline" style="width:160px;margin-top:10px;margin-right:0;" ng-click="next()">Next</div>
+                </div>
+            </div>
+        </div>
+
+        <!--how to apply mastery-->
+        <div class="blockUI" ng-if="tutorial == 4">
+            <div class="modalpop">
+                <div class="level_complete_badge">
+                    <img src="/modules/core/img/chart.svg">
+                </div>
+                <h1>How to Apply</h1>
+
+                <p class="modal_text">
+                    <!--formative assessment?-->
+                    The rule of thumb with mastery is to work on problems that you haven't mastered. When you master a problem check it off the list: it's done and now you can move on to bigger, better challenges.
+                </p>
+
+                <div>
+                    <div class="button button-inline" style="margin-left:0;width:160px;margin-top:10px;" ng-click="back()">Back</div>
+                    <div class="button button-inline" style="width:160px;margin-top:10px;margin-right:0;" ng-click="next()">Next</div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!--<call-out-avatar></call-out-avatar>-->
+        <div class="call_out" data-ng-if="tutorial == 5">
+            <!--top box, height of y-cord-->
+            <div class="blocking_box" style="width:100%;height:63px" ></div>
+            <div class="callout_row" style="white-space:nowrap">
+
+                <!--left inline box-->
+                <div class="blocking_box" style="width:100%; margin-left:-406px;height:145px;display:inline-block;"></div><!--
+    --><span class="circle_bottom" style="display:inline-block;width:400px;height:145px;">
+        <div class="circle_highlight"></div>
+    </span><!--
+        right inline box
+        --><div class="blocking_box" style="width:100%;height:145px;display:inline-block;"></div>
+            </div><!--
+    bottom box
+    --><div class="blocking_box" style="width:100%; height:1000px;margin-top:-6px; color:white">
+            <div style="margin-left:875px;font-size:24px;width:400px;padding-top:20px;">
+                This is your avatar, which grows with you as you master levels and earn stars.<br><br> You can earn stars by making good problem selections and by completing the daily challenges.
+
+                <div>
+                    <div class="button button-inline" style="margin-left:0;width:160px;margin-top:10px;" ng-click="back()">Back</div>
+                    <div class="button button-inline" style="width:160px;margin-top:10px;margin-right:0;" ng-click="next()">Next</div>
+                </div>
+            </div>
+        </div>
+        </div>
+
+    <!--<call-out-challenges></call-out-challenges>-->
+    <div class="call_out" data-ng-if="tutorial == 6">
+        <!--
+        given four inputs: x,y,w,h to specify callout
+        this needs five blocks:
+        1: top blocking box
+            w = 100%
+            h = y
+        2: left blocking box, inline with callout
+            w = 100% shifted left by x
+            h = h
+        3: callout
+        4: right blocking box, inline with callout
+            w = 100% - (x + w), can probably be done with margin?
+            h = h
+        5: bottom blocking box
+            w = 100%
+            h = 100% - (y + h)
+            -->
+
+        <!--x = 100% - 300-->
+        <!--h =-->
+
+
+        <!--top box, height of y-cord-->
+        <div class="blocking_box" style="width:100%;height:234px"></div>
+        <div class="callout_row" style="white-space:nowrap">
+            <div style="margin-left:450px;font-size:24px;width:400px;padding-top:20px;position:absolute;z-index:2000;color:white;white-space:normal;">
+                These are your Daily Challenges.<br><br>
+                Complete these to earn stars and better understand how to make good problem selections.
+
+                <div>
+                <div class="button button-inline" style="margin-left:0;width:160px;margin-top:10px;" ng-click="back()">Back</div>
+                <div class="button button-inline" style="width:160px;margin-top:10px;margin-right:0;" ng-click="next()">Next</div>
+                    </div>
+            </div>
+
+
+            <!--left inline box-->
+            <div class="blocking_box" style="width:100%; margin-left:-406px;height:225px;display:inline-block;"></div><!--
+    --><span class="circle_bottom" style="display:inline-block;width:400px;height:225px;">
+        <div class="circle_highlight"></div>
+    </span><!--
+        right inline box
+        --><div class="blocking_box" style="width:100%;height:225px;display:inline-block;"></div>
+        </div><!--
+    bottom box
+    --><div class="blocking_box" style="width:100%; height:1000px;margin-top:-6px; color:white">
+
+    </div>
+    </div>
+
+
+    <!--<call-out-mastery></call-out-mastery>-->
+    <div class="call_out" data-ng-if="tutorial == 7">
+        <!--top box, height of y-cord-->
+        <div class="blocking_box" style="width:100%;height:167px" ></div>
+        <div class="callout_row" style="white-space:nowrap">
+
+            <!--left inline box-->
+            <div class="blocking_box" style="width:100%; margin-left:-1164px;height:64px;display:inline-block;"></div><!--
+    --><span class="circle_bottom" style="display:inline-block;width:267px;height:64px;">
+        <div class="circle_highlight"></div>
+    </span><!--
+        right inline box
+        --><div class="blocking_box" style="width:100%;height:64px;display:inline-block;"></div>
+        </div><!--
+    bottom box
+    --><div class="blocking_box" style="width:100%; height:1000px;margin-top:-6px; color:white">
+        <div style="margin-left:80px;font-size:24px;width:400px;padding-top:20px;">
+            This is the Mastery Bar.  <br>As you work through problems, Lynnette estimates how well you have mastered the material. <br><br>Mastery means you've fully learned the material in that level, so when you master a level it is good to move on to another level that is not yet mastered.
+
+            <div>
+                <div class="button button-inline" style="margin-left:0;width:160px;margin-top:10px;" ng-click="back()">Back</div>
+                <div class="button button-inline" style="width:160px;margin-top:10px;margin-right:0;" ng-click="next()">Next</div>
+            </div>
+            </div>
+    </div>
+    </div>
+    </div>
+
     <!--achievement directive-->
     <achievement-popover></achievement-popover>
 
@@ -153,20 +361,8 @@
 </div>
 <!--<div class="blockUI" data-ng-show="problem_selection_message" ng-controller="UserInfoController">-->
 <problem-history data-ng-show="problem_selection_message"></problem-history>
-
-<div class="blockUI" data-ng-show="suggested_level_message">
-    <div class="modalpop">
-        <h1>Earth - Complete!</h1>
-
-        <p class="modal_text">
-            Mastery Opportunities in Fire
-        </p>
-
-        <div class="button" data-ng-click="suggested_level_next()">
-            Continue
-        </div>
-    </div>
-</div>
+    <suggested-modal data-ng-show="suggested_level_message">
+    </suggested-modal>
 <div class="blockUI" data-ng-show="bad_selection">
     <div class="modalpop bluebackground">
         <div class="char_background">

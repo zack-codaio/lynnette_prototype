@@ -15,7 +15,8 @@
             <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 1">
 
         </div>
-        <p class="modal_text">
+        <div class="challenge_column">
+        <p class="modal_text" style="margin-top:0;">
             You solved {{total_sequence}} problems, {{missed_opportunities}} of which did not help you toward mastery.
         </p>
 
@@ -27,32 +28,23 @@
         <p class="modal_text" ng-if="missed_opportunities == 0">
             Great job! You chose only problems you haven't already mastered.
         </p>
+        </div>
 
         <div class="challenge_column">
-            <p data-ng-repeat="item in currentSequence.sequence"  data-ng-click="explanatory_feedback($index, item.levelname)" ng-class="{greentext : levelselections[item.levelname].selected == true && levelselections[item.levelname].mastered == false, redtext : levelselections[item.levelname].selected == true && levelselections[item.levelname].mastered == true}">
-                <!--make green if selected for this levelname == true and mastered == false-->
-                <!--make red if selected for this levelname == true and mastered == true-->
-
+            <!--make green if selected for this levelname == true and mastered == false-->
+            <!--make red if selected for this levelname == true and mastered == true-->
+            <p data-ng-repeat="item in sequence1"  data-ng-click="explanatory_feedback($index, item.levelname)" ng-class="{greentext : levelselections[item.levelname].selected == true && levelselections[item.levelname].mastered == false, redtext : levelselections[item.levelname].selected == true && levelselections[item.levelname].mastered == true}">
                 {{$index + 1}}: {{item.levelname}}
-
             </p>
-            <!--<p class="level_history">-->
-            <!--1. Earth<br>-->
-            <!--2. Fire<br>-->
-            <!--3. Earth<br>-->
-            <!--4. Earth<br>-->
-            <!--5. Water<br>-->
-            <!--</p>-->
         </div>
-        <!--<div class="challenge_column">-->
-        <!--<p class="level_history">-->
-        <!--6. Earth<br>-->
-        <!--7. Water<br>-->
-        <!--8. Fire<br>-->
-        <!--9. Earth<br>-->
-        <!--10. Earth<br>-->
-        <!--</p>-->
-        <!--</div>-->
+        <div class="challenge_column">
+            <!--make green if selected for this levelname == true and mastered == false-->
+            <!--make red if selected for this levelname == true and mastered == true-->
+            <p data-ng-repeat="item in sequence2"  data-ng-click="explanatory_feedback($index, item.levelname)" ng-class="{greentext : levelselections[item.levelname].selected == true && levelselections[item.levelname].mastered == false, redtext : levelselections[item.levelname].selected == true && levelselections[item.levelname].mastered == true}">
+                {{$index + sequence1length + 1}}: {{item.levelname}}
+            </p>
+        </div>
+
         <p class="modal_text" ng-if="show_feedback" ng-class="{greentext : greentext}">
             {{the_feedback}}
         </p>

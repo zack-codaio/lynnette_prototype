@@ -1,0 +1,41 @@
+
+<div class="call_out" data-ng-controller="OnboardingController" ng-init="">
+    <!--
+    given four inputs: x,y,w,h to specify callout
+    this needs five blocks:
+    1: top blocking box
+        w = 100%
+        h = y
+    2: left blocking box, inline with callout
+        w = 100% shifted left by x
+        h = h
+    3: callout
+    4: right blocking box, inline with callout
+        w = 100% - (x + w), can probably be done with margin?
+        h = h
+    5: bottom blocking box
+        w = 100%
+        h = 100% - (y + h)
+        -->
+
+    <!--x = 100% - 300-->
+    <!--h =-->
+
+
+<!--top box, height of y-cord-->
+    <div class="blocking_box" style="width:100%;height:234px"></div>
+    <div class="callout_row" style="white-space:nowrap">
+
+        <!--left inline box-->
+    <div class="blocking_box" style="width:100%; margin-left:-406px;height:225px;display:inline-block;"></div><!--
+    --><span class="circle_bottom" style="display:inline-block;width:400px;height:225px;">
+        <div class="circle_highlight"></div>
+    </span><!--
+        right inline box
+        --><div class="blocking_box" style="width:100%;height:225px;display:inline-block;"></div>
+    </div><!--
+    bottom box
+    --><div class="blocking_box" style="width:100%; height:1000px;margin-top:-6px; color:white">
+    <!--{{myStyle}}-->
+</div>
+</div>

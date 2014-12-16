@@ -454,24 +454,104 @@ angular.module('core').controller('SequenceController', ['$scope', '$rootScope',
         $scope.show_feedback = false;
         $scope.the_feedback = "";
         $scope.greentext = false;
-        $scope.explanatory_feedback = function(index){
+        $scope.explanatory_feedback = function(index, selected_levelname){
             console.log("explanatory feedback for "+index);
-            console.log($scope.currentSequence.sequence);
-            if($scope.currentSequence.sequence[index].mastered == true){
-                $scope.greentext = false;
-                $scope.the_feedback = $scope.currentSequence.sequence[index].levelname+" was already mastered, so it did not have any additional opportunities for mastery."
 
-            }
+            //record selections clicked on
+            $scope.levelselections[selected_levelname].selected = true;
 
-            else if($scope.currentSequence.sequence[index].mastered == false){
+            if($scope.levelselections[selected_levelname].mastered == false){
                 $scope.greentext = true;
                 $scope.the_feedback = "Correct! "+ $scope.currentSequence.sequence[index].levelname+" was unmastered and so had opportunities for mastery.  Picking "+$scope.currentSequence.sequence[index].levelname+" was a good choice."
             }
+            else if($scope.levelselections[selected_levelname].mastered == true){
+                $scope.greentext = false;
+                $scope.the_feedback = $scope.currentSequence.sequence[index].levelname+" was already mastered, so it did not have any additional opportunities for mastery."
+            }
 
             $scope.show_feedback = true;
+
+            //if remaining = 0 or there weren't any bad selections
+            //enable continue button
+            var all_selected = true;
+            if(typeof($scope.levelselections['Water']) !== 'undefined'){
+                if($scope.levelselections['Water'].mastered == false && $scope.levelselections['Water'].selected == false){
+                    all_selected = false;
+                }
+            }
+            if(typeof($scope.levelselections['Earth']) !== 'undefined'){
+                if($scope.levelselections['Earth'].mastered == false && $scope.levelselections['Earth'].selected == false){
+                    all_selected = false;
+                }
+            }
+            if(typeof($scope.levelselections['Metal']) !== 'undefined'){
+                if($scope.levelselections['Metal'].mastered == false && $scope.levelselections['Metal'].selected == false){
+                    all_selected = false;
+                }
+            }
+            if(typeof($scope.levelselections['Fire']) !== 'undefined'){
+                if($scope.levelselections['Fire'].mastered == false && $scope.levelselections['Fire'].selected == false){
+                    all_selected = false;
+                }
+            }
+            if(typeof($scope.levelselections['Air']) !== 'undefined'){
+                if($scope.levelselections['Air'].mastered == false && $scope.levelselections['Air'].selected == false){
+                    all_selected = false;
+                }
+            }
+            if(typeof($scope.levelselections['Time']) !== 'undefined'){
+                if($scope.levelselections['Time'].mastered == false && $scope.levelselections['Time'].selected == false){
+                    all_selected = false;
+                }
+            }
+            $scope.continue = all_selected;
         }
 
 
+
+        $scope.levelselections;
+        $scope.continue = false;
+
+        //selection by level type
+
+        //initialize
+        $scope.$on('history_show', function(event, data){
+            //initialize selections clicked on
+            $scope.levelselections = new Object();
+
+            if(lynHistory.missed_opportunities == 0){
+                //enable continue button
+                $scope.continue = true;
+            }
+            else if(lynHistory.missed_opportunities > 0){
+                //disable continue button
+                $scope.continue = false;
+            }
+            console.log(lynHistory.currentSequence.sequence);
+            //make a structure where I can tell if all of the unmastered levels present have been selected
+            for(var i = 0; i < lynHistory.currentSequence.sequence.length; i++){
+                var levelname = lynHistory.currentSequence.sequence[i].levelname;
+                if(typeof $scope.levelselections[levelname] == 'undefined'){
+                    $scope.levelselections[levelname] = new Object();
+                    $scope.levelselections[levelname].selected = false;
+                    $scope.levelselections[levelname].mastered = lynHistory.currentSequence.sequence[i].mastered;
+                }
+            }
+            //console.log($scope.levelselections);
+
+            if(lynHistory.currentSequence.sequence.length >= 8){
+            $scope.sequence1 = lynHistory.currentSequence.sequence;
+            $scope.sequence2 = $scope.sequence1.splice(Math.ceil($scope.sequence1.length*10/2)/10);
+                $scope.sequence1length = $scope.sequence1.length;
+            }
+            else{
+                $scope.sequence1 = lynHistory.currentSequence.sequence;
+            }
+
+        });
+
+
+        //reset
         $scope.$on('history_done', function(event, data){
            $scope.show_feedback = false;
         });
@@ -674,6 +754,41 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
 
 
 
+///**
+// * Created by zackaman on 12/15/14.
+// */
+//
+//'use strict';
+//
+//angular.module('core').directive('callOut',  function(){
+//    return {
+//        restrict: "E",
+//        templateUrl: '/modules/core/directives/callout_challenges.client.template.html'
+//    }
+//});
+/**
+ * Created by zackaman on 12/15/14.
+ */
+
+'use strict';
+
+angular.module('core').directive('suggestedModal',  function(){
+    return {
+        restrict: "E",
+        templateUrl: '/modules/core/directives/modal.client.template.html'
+    }
+});
+'use strict';
+
+/**
+ * Created by zackaman on 12/14/14.
+ */
+angular.module('core').directive('problemHistory',  function(){
+    return {
+        restrict: "E",
+        templateUrl: '/modules/core/directives/problemHistory.html'
+    }
+});
 'use strict';
 
 //Menu service used for managing  menus
@@ -840,17 +955,6 @@ angular.module('core').service('Menus', [
 		this.addMenu('topbar');
 	}
 ]);
-'use strict';
-
-/**
- * Created by zackaman on 12/14/14.
- */
-angular.module('core').directive('problemHistory',  function(){
-    return {
-        restrict: "E",
-        templateUrl: '/modules/core/directives/problemHistory.html'
-    }
-});
 'use strict';
 
 /**
@@ -1400,6 +1504,7 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         }
         $scope.problem_selection_rating = function () {
             console.log("problem selection rating show");
+            $rootScope.$broadcast('history_show', {});
             $scope.problem_selection_message = true;
         }
         $scope.problem_selection_next = function () {

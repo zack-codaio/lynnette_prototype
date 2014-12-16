@@ -3,6 +3,17 @@
 * built on top of the MEAN.js stack
 
 
+#Icon Credits:
+Work by Iris Vidal
+http://thenounproject.com/term/work/65928/
+Chart by Diego Naive
+http://thenounproject.com/term/chart/78919/
+Robot by Ahmed Elzahra
+http://thenounproject.com/term/robot/15493/
+Brain by SuperAtic LABS
+http://thenounproject.com/term/brain/38933/
+
+
 
 [![MEAN.JS Logo](http://meanjs.org/img/logo-small.png)](http://meanjs.org/)
 
