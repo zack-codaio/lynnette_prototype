@@ -8,12 +8,18 @@
             <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 3">
             <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 4">
             <img src="/modules/core/img/star.svg" class="star" ng-if="stars >= 5">
-            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 5">
-            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 4">
-            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 3">
-            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 2">
-            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 1">
 
+            <img src="/modules/core/img/star_feedback.svg" class="star" ng-if="stars_feedback == 5">
+            <img src="/modules/core/img/star_feedback.svg" class="star" ng-if="stars_feedback == 4">
+            <img src="/modules/core/img/star_feedback.svg" class="star" ng-if="stars_feedback == 3">
+            <img src="/modules/core/img/star_feedback.svg" class="star" ng-if="stars_feedback == 2">
+            <img src="/modules/core/img/star_feedback.svg" class="star" ng-if="stars_feedback == 1">
+
+            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 5 && stars_feedback != 5">
+            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 1 && stars_feedback != 4">
+            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 2 && stars_feedback != 3">
+            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 3 && stars_feedback != 2">
+            <img src="/modules/core/img/star_missed.svg" class="star" ng-if="stars < 4 && stars_feedback != 1">
         </div>
         <div class="challenge_column">
         <p class="modal_text" style="margin-top:0;">

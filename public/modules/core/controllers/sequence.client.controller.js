@@ -104,6 +104,15 @@ angular.module('core').controller('SequenceController', ['$scope', '$rootScope',
                     all_selected = false;
                 }
             }
+
+            if(all_selected == true){
+                //if stars < 5
+                //set stars_feedback to stars + 1
+                if(lynHistory.stars < 5){
+                    $scope.stars_feedback = lynHistory.stars + 1;
+                    lynHistory.add_stars(1);
+                }
+            }
             $scope.continue = all_selected;
         }
 
@@ -141,7 +150,8 @@ angular.module('core').controller('SequenceController', ['$scope', '$rootScope',
 
             if(lynHistory.currentSequence.sequence.length >= 8){
             $scope.sequence1 = lynHistory.currentSequence.sequence;
-            $scope.sequence2 = $scope.sequence1.splice(Math.ceil($scope.sequence1.length*10/2)/10);
+            $scope.sequence2 = $scope.sequence1.splice(Math.ceil($scope.sequence1.length/2));
+
                 $scope.sequence1length = $scope.sequence1.length;
             }
             else{

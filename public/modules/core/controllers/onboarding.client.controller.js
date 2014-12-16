@@ -18,6 +18,9 @@ angular.module('core').controller('OnboardingController', ['$scope', '$rootScope
 
         $scope.tutorial = 1;
 
+        //remove me if not in dev
+        $scope.tutorial = 99;
+
         $scope.next = function(){
             $scope.tutorial++;
         }
