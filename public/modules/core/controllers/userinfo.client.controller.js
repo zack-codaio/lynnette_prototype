@@ -74,6 +74,8 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
             }
         })
 
+        $scope.stars_left = 8;
+
         //watch Stars for stars_earned
         $scope.stars_earned = $scope.$watch(function(){
             return Stars.stars;
@@ -81,6 +83,16 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
         function(newVal, oldVal){
             if(typeof newVal !== 'undefined'){
                 $scope.stars_earned = Stars.stars;
+
+                if($scope.stars_earned < 16){
+                    $scope.stars_left = 16 - $scope.stars_earned;
+                }
+                if($scope.stars_earned < 8){
+                    $scope.stars_left =  8 - $scope.stars_earned;
+                }
+                if($scope.stars_earned >= 16){
+                    $scope.stars_left =  24 - $scope.stars_earned;
+                }
             }
         });
 
