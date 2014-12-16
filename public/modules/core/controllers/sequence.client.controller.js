@@ -54,6 +54,7 @@ angular.module('core').controller('SequenceController', ['$scope', '$rootScope',
         $scope.show_feedback = false;
         $scope.the_feedback = "";
         $scope.greentext = false;
+        var earnback = false;
         $scope.explanatory_feedback = function(index, selected_levelname){
             console.log("explanatory feedback for "+index);
 
@@ -105,12 +106,14 @@ angular.module('core').controller('SequenceController', ['$scope', '$rootScope',
                 }
             }
 
+
             if(all_selected == true){
                 //if stars < 5
                 //set stars_feedback to stars + 1
-                if(lynHistory.stars < 5){
-                    $scope.stars_feedback = lynHistory.stars + 1;
-                    lynHistory.add_stars(1);
+                if(lynHistory.stars < 5 && earnback == false){
+                    $scope.stars_feedback = Stars.stars + 1;
+                    Stars.add_stars(1);
+                    earnback = true;
                 }
             }
             $scope.continue = all_selected;
@@ -157,6 +160,8 @@ angular.module('core').controller('SequenceController', ['$scope', '$rootScope',
             else{
                 $scope.sequence1 = lynHistory.currentSequence.sequence;
             }
+
+            earnback = false;
 
         });
 

@@ -84,6 +84,7 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
             if(typeof newVal !== 'undefined'){
                 $scope.stars_earned = Stars.stars;
 
+                //update stars left
                 if($scope.stars_earned < 16){
                     $scope.stars_left = 16 - $scope.stars_earned;
                 }
