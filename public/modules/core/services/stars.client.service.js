@@ -7,7 +7,7 @@
 
 angular.module('core').service('Stars', function(){
     var serviceInstance = new Object();
-        serviceInstance.stars = 3;
+        serviceInstance.stars = 0;
     serviceInstance.add_stars = function(a){
         serviceInstance.stars += a;
         console.log("ADDING STARS: now "+serviceInstance.stars);
