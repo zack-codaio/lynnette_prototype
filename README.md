@@ -6,12 +6,51 @@
 #Icon Credits:
 Work by Iris Vidal
 http://thenounproject.com/term/work/65928/
+
 Chart by Diego Naive
 http://thenounproject.com/term/chart/78919/
+
 Robot by Ahmed Elzahra
 http://thenounproject.com/term/robot/15493/
+
 Brain by SuperAtic LABS
 http://thenounproject.com/term/brain/38933/
+
+Landscape designed by Dmitry Mamaev from the thenounproject.com
+http://thenounproject.com/term/landscape/82578/
+
+Protest designed by Juan Pablo Bravo from the thenounproject.com
+http://thenounproject.com/term/protest/15383/
+
+Trophy designed by Matthew R. Miller from the thenounproject.com
+http://thenounproject.com/term/trophy/2477/
+
+Masks designed by Studio Fibonacci from the thenounproject.com
+http://thenounproject.com/term/masks/78404/
+
+http://thenounproject.com/term/gear/10651/
+Gear designed by Tarah from the thenounproject.com
+
+Fire designed by Alan Hussey from the thenounproject.com
+http://thenounproject.com/term/fire/1571/
+
+Wind designed by Megan Sheehan from the thenounproject.com
+http://thenounproject.com/term/wind/11086/
+
+Water designed by Quan Vu from the thenounproject.com
+http://thenounproject.com/term/water/45044/
+
+Plant designed by Michele Zamparo from the thenounproject.com
+http://thenounproject.com/term/plant/51898/
+
+Cursor designed by Fernando Vasconcelos from the thenounproject.com
+http://thenounproject.com/term/cursor/3065/
+
+Time Portal designed by Julien Deveaux from the thenounproject.com
+http://thenounproject.com/term/time-portal/14774/
+
+
+
 
 
 
