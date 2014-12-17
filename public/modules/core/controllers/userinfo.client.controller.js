@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('core').controller('UserInfoController', ['$scope', 'Authentication', 'Menus', '$rootScope', 'Stars', 'lynHistory',
-    function($scope, Authentication, Menus, $rootScope, Stars, lynHistory) {
+angular.module('core').controller('UserInfoController', ['$scope', 'Authentication', 'Menus', '$rootScope', 'Stars', 'lynHistory', 'Challenges',
+    function($scope, Authentication, Menus, $rootScope, Stars, lynHistory, Challenges) {
         $scope.authentication = Authentication;
 
         console.log(Authentication);
@@ -105,6 +105,41 @@ angular.module('core').controller('UserInfoController', ['$scope', 'Authenticati
                $scope.eventList = lynHistory.eventList;
            }
         });
+
+
+
+        //watch Challenges for redemption
+        $scope.redemption = $scope.$watch(function(){
+                return Challenges.redemption;
+            },
+            function(newVal, oldVal){
+                if(typeof newVal !== 'undefined'){
+                    $scope.redemption = Challenges.redemption;
+                }
+
+            });
+
+        //watch Challenges for wise_words
+        $scope.wise_words = $scope.$watch(function(){
+                return Challenges.wise_words;
+            },
+            function(newVal, oldVal){
+                if(typeof newVal !== 'undefined'){
+                    $scope.wise_words = Challenges.wise_words;
+                }
+
+            });
+
+        //watch Challenges for second_thoughts
+        $scope.second_thoughts = $scope.$watch(function(){
+                return Challenges.second_thoughts;
+            },
+            function(newVal, oldVal){
+                if(typeof newVal !== 'undefined'){
+                    $scope.second_thoughts = Challenges.second_thoughts;
+                }
+
+            });
 
         //elemental sampler is triggered off of individual levels selected
         $scope.achievement_earned = 0;

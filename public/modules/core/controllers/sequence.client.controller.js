@@ -111,9 +111,11 @@ angular.module('core').controller('SequenceController', ['$scope', '$rootScope',
                 //if stars < 5
                 //set stars_feedback to stars + 1
                 if(lynHistory.stars < 5 && earnback == false){
-                    $scope.stars_feedback = Stars.stars + 1;
+                    $scope.stars_feedback = lynHistory.stars + 1;
+                    console.log($scope.stars_feedback);
                     Stars.add_stars(1);
                     earnback = true;
+                    $rootScope.$broadcast('star_earned', {});
                 }
             }
             $scope.continue = all_selected;
@@ -130,6 +132,8 @@ angular.module('core').controller('SequenceController', ['$scope', '$rootScope',
         $scope.$on('history_show', function(event, data){
             //initialize selections clicked on
             $scope.levelselections = new Object();
+            earnback = false;
+            $scope.stars_feedback = 0;
 
             if(lynHistory.missed_opportunities == 0){
                 //enable continue button
@@ -161,7 +165,7 @@ angular.module('core').controller('SequenceController', ['$scope', '$rootScope',
                 $scope.sequence1 = lynHistory.currentSequence.sequence;
             }
 
-            earnback = false;
+
 
         });
 

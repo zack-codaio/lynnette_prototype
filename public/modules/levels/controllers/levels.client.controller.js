@@ -197,7 +197,10 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
         }
         $scope.suggested_level_next = function () {
             $scope.suggested_level_message = false;
-
+        }
+        $scope.pick_suggested = function(){
+            $scope.suggested_level_message = false;
+            $rootScope.$broadcast('wise_words');
         }
 
 
@@ -215,6 +218,8 @@ angular.module('levels').controller('LevelsController', ['$scope', '$stateParams
             $scope.bad_selection = false;
             if (a == 1) {
                 $scope.problem_screen = false;
+                //$scope.select_level(3);
+                $rootScope.$broadcast('second_thoughts', {});
             }
         }
 
